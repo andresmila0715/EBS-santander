@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartografia De Equipos Basicos</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+    #logo {
+        transition: opacity 0.8s ease;
+        opacity: 1;
+        font-weight: bold;
+        font-size: 22px;
+    }
+    #logo.fade-out {
+        opacity: 0;
+    }
+    </style>
+</head>
+<body>
+<nav>
+    <div id="logo">CEB</div>
+    <img src="logo_castillo_transparente.png" alt="Icono" class="nav-img">
+</nav>
+
+    <h1>Equipos Basicos de Santander</h1>
+
+<div class="galeria">
+    <div class="imagen">
+        <a href="https://labellezasantander.netlify.app" target="_blank">
+            <img src="Belleza.jpg" alt="La Belleza">
+            <span class="nombre">La Belleza (2025)</span>
+        </a>
+    </div>
+
+    <div class="imagen">
+        <a href="https://cartografia-equipos-basicos.netlify.app/" target="_blank">
+            <img src="Florian.jpeg" alt="Florian">
+            <span class="nombre">Florian (2025)</span>
+        </a>
+    </div>
+
+    <div class="imagen">
+        <a href="https://cartografia-ebs.netlify.app/" target="_blank">
+            <img src="Puente Nacional.jpg" alt="Puente Nacional">
+            <span class="nombre">Puente Nacional (2025)</span>
+        </a>
+    </div>
+
+    <div class="imagen">
+        <a href="https://cartografia-ebs.netlify.app/" target="_blank">
+            <img src="Oiba.jpg" alt="Oiba">
+            <span class="nombre">Oiba (2025)</span>
+        </a>
+    </div>
+
+    <div class="imagen">
+        <a href="https://cartografia-ebs.netlify.app/" target="_blank">
+            <img src="Jesus Maria.avif" alt="Jesús María">
+            <span class="nombre">Jesús María (2025)</span>
+        </a>
+    </div>
+
+        <div class="imagen">
+        <a href="https://enciso-ebs.netlify.app/" target="_blank">
+            <img src="enciso.jpg" alt="Jesús María">
+            <span class="nombre">Enciso (2025-2026)</span>
+        </a>
+    </div>
+
+            <div class="imagen">
+        <a href="https://enciso-ebs.netlify.app/" target="_blank">
+            <img src="belleza.jpg" alt="Jesús María">
+            <span class="nombre">La Belleza (2025-2026)</span>
+        </a>
+    </div>
+
+    <div class="imagen proximo">
+        <div class="proximo-texto">Próximamente</div>
+    </div>
+</div>
+
+<script>
+window.addEventListener("load", () => {
+    const logo = document.getElementById("logo");
+    setTimeout(() => {
+        logo.classList.add("fade-out");
+        setTimeout(() => {
+            logo.textContent = "Cartografía Equipos Básicos";
+            logo.classList.remove("fade-out"); 
+        }, 800); 
+    }, 1500);
+});
+</script>
+</body>
+</html>
