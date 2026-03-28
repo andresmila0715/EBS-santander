@@ -1,96 +1,876 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartografia De Equipos Basicos</title>
-    <link rel="stylesheet" href="style.css">
+    <title>EBS+ Santander | Equipos Básicos de Salud</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-    #logo {
-        transition: opacity 0.8s ease;
-        opacity: 1;
-        font-weight: bold;
-        font-size: 22px;
-    }
-    #logo.fade-out {
-        opacity: 0;
-    }
+        :root {
+            --primary: #005f73;
+            --primary-light: #0a9396;
+            --primary-dark: #003d4d;
+            --accent: #d11d5b;
+            --accent-light: #f72585;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #1a2332;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 20px 50px rgba(0,0,0,0.12);
+            --radius: 12px;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'DM Sans', system-ui, sans-serif;
+        }
+
+        body.high-contrast {
+            --primary: #000;
+            --primary-light: #222;
+            --bg: #111;
+            --surface: #000;
+            --text: #ffff00;
+            --text-muted: #cccc00;
+            --border: #444;
+            --accent: #ffff00;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .gov-bar {
+            background: var(--primary-dark);
+            padding: 10px 8%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideDown 0.5s ease;
+        }
+        .gov-bar img { height: 60px; filter: brightness(1.1); }
+        .gov-bar-text {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        nav {
+            background: var(--primary);
+            padding: 0 8%;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: slideDown 0.5s ease 0.1s both;
+        }
+
+        .menu-principal { display: flex; list-style: none; gap: 0; }
+        .menu-item { position: relative; }
+
+        .menu-item a {
+            display: block;
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            padding: 20px 18px;
+            transition: color 0.2s, background 0.2s;
+            position: relative;
+        }
+
+        .menu-item a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 18px; right: 18px;
+            height: 2px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transition: transform 0.25s ease;
+            border-radius: 2px 2px 0 0;
+        }
+
+        .menu-item:hover a { color: #fff; background: rgba(255,255,255,0.08); }
+        .menu-item:hover a::after { transform: scaleX(1); }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--surface);
+            min-width: 220px;
+            box-shadow: var(--shadow-lg);
+            border-radius: 0 0 var(--radius) var(--radius);
+            border-top: 2px solid var(--accent);
+            overflow: hidden;
+            animation: fadeDown 0.2s ease;
+        }
+
+        .menu-item:hover .dropdown-content { display: block; }
+
+        .dropdown-content a {
+            color: var(--text) !important;
+            padding: 11px 18px !important;
+            font-size: 0.875rem !important;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s, padding-left 0.15s !important;
+        }
+
+        .dropdown-content a::after { display: none !important; }
+        .dropdown-content a:hover { background: #f0f9ff !important; padding-left: 24px !important; }
+
+        .banner-principal {
+            position: relative;
+            width: 100%;
+            height: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .banner-bg {
+            position: absolute;
+            inset: 0;
+            background: url("H3.jpg") center/cover no-repeat;
+            filter: brightness(0.45);
+            z-index: 0;
+            transform: scale(1.05);
+            animation: slowZoom 12s ease-out forwards;
+        }
+
+        .banner-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,63,77,0.5) 0%, rgba(0,0,0,0.2) 100%);
+            z-index: 1;
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            animation: fadeUp 1s ease 0.3s both;
+        }
+
+        .banner-tag {
+            display: inline-block;
+            background: rgba(209,29,91,0.85);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 5px 16px;
+            border-radius: 30px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(4px);
+        }
+
+        .banner-principal h1 {
+            color: white;
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            letter-spacing: 0.02em;
+            line-height: 1.1;
+        }
+
+        .banner-sub {
+            color: rgba(255,255,255,0.8);
+            font-size: 1.1rem;
+            margin-top: 12px;
+            font-weight: 300;
+            letter-spacing: 0.04em;
+        }
+
+        .banner-scroll {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            animation: bounce 2s infinite;
+        }
+
+        .banner-scroll svg { opacity: 0.7; }
+
+        .stats-bar {
+            background: var(--primary);
+            padding: 0 8%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+        }
+
+        .stat-item {
+            padding: 24px 20px;
+            text-align: center;
+            border-right: 1px solid rgba(255,255,255,0.12);
+            transition: background 0.2s;
+        }
+        .stat-item:last-child { border-right: none; }
+        .stat-item:hover { background: rgba(255,255,255,0.06); }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: #fff;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.65);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 4px;
+        }
+
+        .section-wrapper { max-width: 1200px; margin: 0 auto; padding: 70px 24px; }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 36px;
+        }
+
+        .section-label::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 36px;
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        .section-label h2 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .news-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 28px; }
+
+        .news-main-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .news-main-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+        .news-main-card img {
+            width: 100%; height: 300px;
+            object-fit: cover; display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .news-main-card:hover img { transform: scale(1.03); }
+        .news-main-card .card-body { padding: 24px; }
+
+        .news-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+
+        .news-cat {
+            background: var(--accent);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .news-date { font-size: 0.8rem; color: var(--text-muted); }
+
+        .news-headline {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.35;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .news-excerpt { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        .news-read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 16px;
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: gap 0.2s;
+        }
+        .news-read-more:hover { gap: 10px; }
+
+        .news-sidebar-col { display: flex; flex-direction: column; gap: 16px; }
+
+        .sidebar-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: flex;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.25s, box-shadow 0.25s;
+            cursor: pointer;
+        }
+
+        .sidebar-card:hover { transform: translateX(4px); box-shadow: var(--shadow-md); }
+
+        .sidebar-card img { width: 110px; min-height: 90px; object-fit: cover; flex-shrink: 0; }
+
+        .sidebar-card-body {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .sidebar-card-title { font-size: 0.88rem; font-weight: 600; line-height: 1.35; color: var(--text); }
+        .sidebar-card-date { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+
+        .territorios-bg { background: linear-gradient(160deg, #f0f9ff 0%, #e0f2fe 100%); }
+
+        .municipios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+
+        .municipio-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius);
+            height: 200px;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+        }
+
+        .municipio-card:hover { transform: scale(1.04); box-shadow: var(--shadow-lg); z-index: 2; }
+
+        .municipio-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .municipio-card:hover img { transform: scale(1.12); }
+
+        .municipio-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,40,55,0.75) 0%, transparent 60%);
+        }
+
+        .municipio-nombre {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            color: white;
+            padding: 14px 12px 12px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            letter-spacing: 0.02em;
+        }
+
+        .municipio-year {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .eventos-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px; }
+
+        .video-card { background: var(--surface); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-md); }
+        .video-card iframe { width: 100%; aspect-ratio: 16/9; display: block; }
+        .video-caption { padding: 16px 20px; font-weight: 600; font-size: 0.9rem; color: var(--text); border-top: 1px solid var(--border); }
+
+        .calendar-card { background: var(--surface); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-md); }
+
+        .cal-header {
+            background: var(--primary);
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); padding: 14px; gap: 2px; }
+
+        .day-name {
+            text-align: center;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            padding: 6px 0;
+            letter-spacing: 0.04em;
+        }
+
+        .day { text-align: center; padding: 8px 4px; font-size: 0.85rem; border-radius: 6px; cursor: default; transition: background 0.15s; color: var(--text); }
+        .day:not(:empty):hover { background: #f0f9ff; }
+
+        .today { background: var(--accent); color: white !important; font-weight: 700; border-radius: 6px; box-shadow: 0 2px 8px rgba(209,29,91,0.4); }
+
+        .cal-footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 14px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lateral-tools {
+            position: fixed;
+            right: 0; top: 40%;
+            background: var(--primary);
+            width: 44px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 14px 0;
+            border-radius: 12px 0 0 12px;
+            gap: 18px;
+            z-index: 2000;
+            box-shadow: -2px 0 12px rgba(0,0,0,0.12);
+        }
+
+        .tool-btn {
+            cursor: pointer;
+            font-size: 17px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            transition: background 0.2s, transform 0.2s;
+            user-select: none;
+        }
+
+        .tool-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.15); }
+
+        .contact-fab {
+            position: fixed;
+            bottom: 28px; right: 28px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .contact-panel {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 22px;
+            width: 290px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            opacity: 0;
+            transform: translateY(12px) scale(0.97);
+            pointer-events: none;
+            transition: opacity 0.25s, transform 0.25s;
+        }
+
+        .contact-panel.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
+
+        .contact-panel h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .contact-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 0.88rem; color: var(--text); }
+        .contact-icon { font-size: 1.1rem; }
+
+        .contact-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: var(--font-body);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(0,95,115,0.35);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .contact-toggle:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,95,115,0.4); }
+
+        footer {
+            background: var(--primary-dark);
+            color: rgba(255,255,255,0.7);
+            padding: 40px 8%;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-col h4 { color: white; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; }
+
+        .footer-col p, .footer-col a {
+            font-size: 0.82rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.55);
+            text-decoration: none;
+            display: block;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover { color: rgba(255,255,255,0.9); }
+
+        .footer-bottom { background: rgba(0,0,0,0.2); text-align: center; padding: 14px; font-size: 0.75rem; color: rgba(255,255,255,0.35); }
+
+        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeDown { from { transform: translateY(-8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slowZoom { from { transform: scale(1.08); } to { transform: scale(1.0); } }
+        @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
+
+        .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        @media (max-width: 900px) {
+            .news-grid, .eventos-grid { grid-template-columns: 1fr; }
+            .municipios-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            footer { grid-template-columns: 1fr; gap: 24px; }
+        }
+
+        @media (max-width: 600px) {
+            .municipios-grid { grid-template-columns: 1fr; }
+            .stats-bar { grid-template-columns: 1fr 1fr; }
+            .banner-principal h1 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
-<nav>
-    <div id="logo">CEB</div>
-    <img src="logo_castillo_transparente.png" alt="Icono" class="nav-img">
-</nav>
 
-    <h1>Equipos Basicos de Santander</h1>
-
-<div class="galeria">
-    <div class="imagen">
-        <a href="https://labellezasantander.netlify.app" target="_blank">
-            <img src="Belleza.jpg" alt="La Belleza">
-            <span class="nombre">La Belleza (2025)</span>
-        </a>
+    <div class="gov-bar">
+        <img src="logo_castillo_transparente.png" alt="EBS+ Santander">
+        <span class="gov-bar-text">Equipos Basicos de Salud - Santander</span>
     </div>
 
-    <div class="imagen">
-        <a href="https://cartografia-equipos-basicos.netlify.app/" target="_blank">
-            <img src="Florian.jpeg" alt="Florian">
-            <span class="nombre">Florian (2025)</span>
-        </a>
+    <nav>
+        <ul class="menu-principal">
+            <li class="menu-item"><a href="#">Inicio</a></li>
+            <li class="menu-item"><a href="#territorios" onclick="event.preventDefault();document.getElementById('territorios').scrollIntoView({behavior:'smooth'})">Territorios</a></li>
+            <li class="menu-item"><a href="#">Cartografías ▾</a>
+                <div class="dropdown-content">
+                    <a href="#">La Belleza</a>
+                    <a href="#">Florian</a>
+                    <a href="#">Puente Nacional</a>
+                    <a href="#">Oiba</a>
+                    <a href="#">Jesús María</a>
+                    <a href="#">Enciso</a>
+                    <a href="indexcar.html">Sucre</a>
+                </div>
+            </li>
+            <li class="menu-item"><a href="#">Estadísticas ▾</a>
+                <div class="dropdown-content">
+                    <a href="#">La Belleza</a>
+                    <a href="#">Florian</a>
+                    <a href="#">Puente Nacional</a>
+                    <a href="#">Oiba</a>
+                    <a href="#">Jesús María</a>
+                    <a href="#">Enciso</a>
+                    <a href="#">Sucre</a>
+                </div>
+            </li>
+            <li class="menu-item"><a href="#">Viviendas ▾</a>
+                <div class="dropdown-content">
+                    <a href="#">La Belleza</a>
+                    <a href="#">Florian</a>
+                    <a href="#">Puente Nacional</a>
+                    <a href="#">Oiba</a>
+                    <a href="#">Jesús María</a>
+                    <a href="#">Enciso</a>
+                    <a href="#">Sucre</a>
+                </div>
+            </li>
+            <li class="menu-item"><a href="#">Aplicaciones ▾</a>
+                <div class="dropdown-content">
+                    <a href="#">La Belleza</a>
+                    <a href="#">Florian</a>
+                    <a href="#">Puente Nacional</a>
+                    <a href="#">Oiba</a>
+                    <a href="#">Jesús María</a>
+                    <a href="#">Enciso</a>
+                    <a href="#">Sucre</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="banner-principal">
+        <div class="banner-bg"></div>
+        <div class="banner-overlay"></div>
+        <div class="banner-content">
+            <span class="banner-tag">Salud en tu territorio</span>
+            <h1>EBS+ Santander</h1>
+            <p class="banner-sub">Equipos Básicos de Salud · Atención primaria en tu comunidad</p>
+        </div>
+        <div class="banner-scroll">
+            <svg width="16" height="22" viewBox="0 0 16 22" fill="none"><rect x="1" y="1" width="14" height="20" rx="7" stroke="white" stroke-width="1.5"/><circle cx="8" cy="6" r="2" fill="white"/></svg>
+            <span>Explorar</span>
+        </div>
     </div>
 
-    <div class="imagen">
-        <a href="https://cartografia-ebs.netlify.app/" target="_blank">
-            <img src="Puente Nacional.jpg" alt="Puente Nacional">
-            <span class="nombre">Puente Nacional (2025)</span>
-        </a>
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-number" data-target="8">0</div>
+            <div class="stat-label">Municipios atendidos</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-target="2" data-suffix="+">0</div>
+            <div class="stat-label">Años de operación</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-target="12">0</div>
+            <div class="stat-label">Equipos activos</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-target="4800" data-suffix="+">0</div>
+            <div class="stat-label">Familias beneficiadas</div>
+        </div>
     </div>
 
-    <div class="imagen">
-        <a href="https://cartografia-ebs.netlify.app/" target="_blank">
-            <img src="Oiba.jpg" alt="Oiba">
-            <span class="nombre">Oiba (2025)</span>
-        </a>
+    <section>
+        <div class="section-wrapper">
+            <div class="section-label reveal">
+                <h2>Noticias</h2>
+            </div>
+            <div class="news-grid">
+                <div class="news-main-card reveal">
+                    <img src="nt.jpg" alt="Equipos Básicos de Salud en La Belleza">
+                    <div class="card-body">
+                        <div class="news-meta">
+                            <span class="news-cat">Cobertura</span>
+                            <span class="news-date">27 Mar 2026</span>
+                        </div>
+                        <div class="news-headline">La Belleza ya cuenta con las visitas de los equipos básicos</div>
+                        <p class="news-excerpt">Tanto las personas residentes de la zona rural y de zona urbana, ya cuentan con las primeras visitas de nuestros equipos básicos de salud.</p>
+                        <a href="#" class="news-read-more">Leer más →</a>
+                    </div>
+                </div>
+                <div class="news-sidebar-col">
+                    <div class="sidebar-card reveal reveal-delay-1">
+                        <img src="Captura de pantalla 2026-03-27 093327.png" alt="Sucre">
+                        <div class="sidebar-card-body">
+                            <div class="sidebar-card-title">Nuestros servicios ya están disponibles para el municipio de Sucre</div>
+                            <div class="sidebar-card-date">22 Mar 2026</div>
+                        </div>
+                    </div>
+                    <div class="sidebar-card reveal reveal-delay-2">
+                        <img src="Captura de pantalla 2026-03-22 173746.png" alt="Cartografías">
+                        <div class="sidebar-card-body">
+                            <div class="sidebar-card-title">Nuevas actualizaciones en las cartografías de territorios</div>
+                            <div class="sidebar-card-date">18 Mar 2026</div>
+                        </div>
+                    </div>
+                    <div class="sidebar-card reveal reveal-delay-3" style="border: 2px dashed var(--border); box-shadow:none; background: #fafafa; cursor:default;">
+                        <div style="width:110px; height:90px; background: #eef2f7; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <span style="font-size:1.4rem;">📰</span>
+                        </div>
+                        <div class="sidebar-card-body">
+                            <div class="sidebar-card-title" style="color: var(--text-muted);">Próximas novedades del programa EBS+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="territorios" class="territorios-bg">
+        <div class="section-wrapper">
+            <div class="section-label reveal">
+                <h2>Territorios Atendidos</h2>
+            </div>
+            <div class="municipios-grid">
+                <div class="municipio-card reveal reveal-delay-1"><img src="belleza.jpg" alt="La Belleza"><div class="municipio-overlay"></div><div class="municipio-nombre">La Belleza <span class="municipio-year">2025</span></div></div>
+                <div class="municipio-card reveal reveal-delay-2"><img src="florian.jpeg" alt="Florian"><div class="municipio-overlay"></div><div class="municipio-nombre">Florian <span class="municipio-year">2025</span></div></div>
+                <div class="municipio-card reveal reveal-delay-3"><img src="puente nacional.jpg" alt="Puente Nacional"><div class="municipio-overlay"></div><div class="municipio-nombre">Puente Nacional <span class="municipio-year">2025</span></div></div>
+                <div class="municipio-card reveal reveal-delay-1"><img src="oiba.jpg" alt="Oiba"><div class="municipio-overlay"></div><div class="municipio-nombre">Oiba <span class="municipio-year">2025</span></div></div>
+                <div class="municipio-card reveal reveal-delay-2"><img src="jesus maria.avif" alt="Jesús María"><div class="municipio-overlay"></div><div class="municipio-nombre">Jesús María <span class="municipio-year">2025</span></div></div>
+                <div class="municipio-card reveal reveal-delay-3"><img src="enciso.jpg" alt="Enciso"><div class="municipio-overlay"></div><div class="municipio-nombre">Enciso <span class="municipio-year">2025</span></div></div>
+                <div class="municipio-card reveal reveal-delay-1"><img src="belleza.jpg" alt="La Belleza 2026"><div class="municipio-overlay"></div><div class="municipio-nombre">La Belleza <span class="municipio-year">2026</span></div></div>
+                <div class="municipio-card reveal reveal-delay-2"><img src="sucre.avif" alt="Sucre"><div class="municipio-overlay"></div><div class="municipio-nombre">Sucre <span class="municipio-year">2026</span></div></div>
+                <div class="municipio-card reveal reveal-delay-3" style="background: linear-gradient(135deg, #e0f2fe, #f0fdf4); display:flex; align-items:center; justify-content:center; cursor:default;">
+                    <div style="text-align:center; color: var(--primary);">
+                        <div style="font-size:2rem; margin-bottom:8px;">🗺️</div>
+                        <div style="font-weight:600; font-size:0.9rem;">Próximamente</div>
+                        <div style="font-size:0.75rem; color: var(--text-muted); margin-top:4px;">Nuevo territorio 2026</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-wrapper">
+            <div class="section-label reveal">
+                <h2>Eventos</h2>
+            </div>
+            <div class="eventos-grid">
+                <div class="video-card reveal">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+                    <div class="video-caption">🎬 Resumen de Eventos 2025 — EBS+ Santander</div>
+                </div>
+                <div class="calendar-card reveal reveal-delay-1">
+                    <div class="cal-header">
+                        <span id="monthName">Mes</span>
+                        <span id="yearName">Año</span>
+                    </div>
+                    <div class="cal-grid" id="calendarGrid"></div>
+                    <div class="cal-footer">
+                        <span>📅</span> Próximos eventos del programa
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-col">
+            <h4>EBS+ Santander</h4>
+            <p>Programa de Equipos Básicos de Salud en Santander, Colombia.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Secciones</h4>
+            <a href="#">Inicio</a>
+            <a href="#territorios" onclick="event.preventDefault();document.getElementById('territorios').scrollIntoView({behavior:'smooth'})">Territorios</a>
+            <a href="#">Cartografías</a>
+            <a href="#">Estadísticas</a>
+            <a href="#">Aplicaciones</a>
+        </div>
+        <div class="footer-col">
+            <h4>Contacto</h4>
+            <p>📞 +57 301 187 5438 / +57 301 187 5236</p>
+            <p>📧 equiposbasicosplus@gmail.com</p>
+        </div>
+    </footer>
+    <div class="footer-bottom">© 2026 EBS+ Santander · Castillo</div>
+
+    <div class="lateral-tools">
+        <div class="tool-btn" onclick="toggleContrast()" title="Alto contraste">👁️</div>
+        <div class="tool-btn" onclick="changeFontSize(2)" title="Aumentar texto">A+</div>
+        <div class="tool-btn" onclick="changeFontSize(-2)" title="Reducir texto">A−</div>
     </div>
 
-    <div class="imagen">
-        <a href="https://cartografia-ebs.netlify.app/" target="_blank">
-            <img src="Jesus Maria.avif" alt="Jesús María">
-            <span class="nombre">Jesús María (2025)</span>
-        </a>
+    <div class="contact-fab">
+        <div id="contactPanel" class="contact-panel">
+            <h3>Contáctenos</h3>
+            <div class="contact-item"><span class="contact-icon">📞</span><span>+57 301 187 5438 / +57 301 187 5236</span></div>
+            <div class="contact-item"><span class="contact-icon">📧</span><span>equiposbasicosplus@gmail.com</span></div>
+            <div class="contact-item"><span class="contact-icon">🕐</span><span>Lun–Vie 8:00 am – 5:00 pm</span></div>
+        </div>
+        <button class="contact-toggle" onclick="toggleContact()">
+            <span>✉</span> Contactos
+        </button>
     </div>
 
-        <div class="imagen">
-        <a href="https://enciso-ebs.netlify.app/" target="_blank">
-            <img src="enciso.jpg" alt="Jesús María">
-            <span class="nombre">Enciso (2025-2026)</span>
-        </a>
-    </div>
+    <script>
+        function toggleContrast() { document.body.classList.toggle('high-contrast'); }
+        let currentSize = 16;
+        function changeFontSize(step) {
+            currentSize = Math.min(22, Math.max(12, currentSize + step));
+            document.documentElement.style.fontSize = currentSize + 'px';
+        }
+        function toggleContact() {
+            document.getElementById('contactPanel').classList.toggle('active');
+        }
 
-            <div class="imagen">
-        <a href="https://enciso-ebs.netlify.app/" target="_blank">
-            <img src="belleza.jpg" alt="Jesús María">
-            <span class="nombre">La Belleza (2025-2026)</span>
-        </a>
-    </div>
+        const date = new Date();
+        const monthNames = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+        const dayNames = ["Do","Lu","Ma","Mi","Ju","Vi","Sa"];
+        document.getElementById('monthName').textContent = monthNames[date.getMonth()];
+        document.getElementById('yearName').textContent = date.getFullYear();
 
-    <div class="imagen proximo">
-        <div class="proximo-texto">Próximamente</div>
-    </div>
-</div>
+        const grid = document.getElementById('calendarGrid');
+        dayNames.forEach(d => grid.innerHTML += `<div class="day-name">${d}</div>`);
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+        for (let i = 0; i < firstDay; i++) grid.innerHTML += `<div></div>`;
+        for (let i = 1; i <= lastDay; i++) {
+            const isToday = i === date.getDate() ? 'today' : '';
+            grid.innerHTML += `<div class="day ${isToday}">${i}</div>`;
+        }
 
-<script>
-window.addEventListener("load", () => {
-    const logo = document.getElementById("logo");
-    setTimeout(() => {
-        logo.classList.add("fade-out");
-        setTimeout(() => {
-            logo.textContent = "Cartografía Equipos Básicos";
-            logo.classList.remove("fade-out"); 
-        }, 800); 
-    }, 1500);
-});
-</script>
+        const revealEls = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        revealEls.forEach(el => observer.observe(el));
+
+        const counters = document.querySelectorAll('.stat-number[data-target]');
+        const countObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (!e.isIntersecting) return;
+                const el = e.target;
+                const target = +el.dataset.target;
+                const suffix = el.dataset.suffix || '';
+                const step = target / (1200 / 16);
+                let current = 0;
+                const timer = setInterval(() => {
+                    current = Math.min(current + step, target);
+                    el.textContent = Math.floor(current).toLocaleString('es-CO') + suffix;
+                    if (current >= target) clearInterval(timer);
+                }, 16);
+                countObserver.unobserve(el);
+            });
+        }, { threshold: 0.5 });
+        counters.forEach(el => countObserver.observe(el));
+    </script>
 </body>
 </html>
