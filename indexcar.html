@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartografía · Sucre · EBS+ Santander</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-light: #0a9396;
+            --primary-dark: #003d4d;
+            --accent: #d11d5b;
+            --bg: #f0f4f8;
+            --surface: #ffffff;
+            --text: #1a2332;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+            --radius: 10px;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'DM Sans', system-ui, sans-serif;
+            --sidebar-w: 290px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+        /* TOPBAR */
+        /* GOV BAR */
+        .gov-bar { background: var(--primary-dark); padding: 10px 8%; display: flex; align-items: center; gap: 12px; }
+        .gov-bar img { height: 60px; filter: brightness(1.1); }
+        .gov-bar-text { color: rgba(255,255,255,0.7); font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; }
+
+        /* NAV */
+        nav { background: var(--primary); padding: 0 8%; display: flex; align-items: center; box-shadow: 0 2px 12px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 1000; }
+        .menu-principal { display: flex; list-style: none; gap: 0; }
+        .menu-item { position: relative; }
+        .menu-item a { display: block; color: rgba(255,255,255,0.9); text-decoration: none; font-weight: 500; font-size: 0.9rem; letter-spacing: 0.02em; padding: 20px 18px; transition: color 0.2s, background 0.2s; position: relative; }
+        .menu-item a::after { content: ''; position: absolute; bottom: 0; left: 18px; right: 18px; height: 2px; background: var(--accent); transform: scaleX(0); transition: transform 0.25s ease; border-radius: 2px 2px 0 0; }
+        .menu-item:hover a { color: #fff; background: rgba(255,255,255,0.08); }
+        .menu-item:hover a::after { transform: scaleX(1); }
+        .menu-item a.active::after { transform: scaleX(1); }
+        .dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: var(--surface); min-width: 220px; box-shadow: 0 20px 50px rgba(0,0,0,0.12); border-radius: 0 0 12px 12px; border-top: 2px solid var(--accent); overflow: hidden; }
+        .menu-item:hover .dropdown-content { display: block; animation: fadeDown 0.2s ease; }
+        .dropdown-content a { color: var(--text) !important; padding: 11px 18px !important; font-size: 0.875rem !important; border-bottom: 1px solid var(--border); transition: background 0.15s, padding-left 0.15s !important; display: block; font-weight: 500; }
+        .dropdown-content a::after { display: none !important; }
+        .dropdown-content a:hover { background: #f0f9ff !important; padding-left: 24px !important; color: var(--primary) !important; }
+        .dropdown-content a.active-page { color: var(--primary) !important; background: #e0f2fe !important; font-weight: 600 !important; }
+        @keyframes fadeDown { from { transform: translateY(-8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* HERO */
+        .hero { background: linear-gradient(130deg, var(--primary-dark) 0%, #004d60 55%, var(--primary-light) 100%); padding: 36px 5% 30px; position: relative; overflow: hidden; animation: heroIn 0.6s ease both; }
+        .hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 280px; height: 280px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+        .breadcrumb { display: flex; align-items: center; gap: 7px; color: rgba(255,255,255,0.5); font-size: 0.76rem; margin-bottom: 14px; }
+        .breadcrumb a { color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: rgba(255,255,255,0.9); }
+        .hero h1 { font-family: var(--font-display); color: white; font-size: clamp(1.7rem, 3.5vw, 2.6rem); font-weight: 700; line-height: 1.1; position: relative; z-index: 1; }
+        .hero h1 em { font-style: normal; display: block; color: rgba(255,255,255,0.55); font-size: 0.58em; font-family: var(--font-body); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+        .hero-badges { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+        .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.1); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.16); color: rgba(255,255,255,0.88); font-size: 0.75rem; font-weight: 500; padding: 5px 13px; border-radius: 30px; }
+        .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 6px #4ade80; animation: pulse 2s infinite; }
+
+        /* LAYOUT */
+        .layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: calc(100vh - 180px); }
+
+        /* SIDEBAR */
+        .sidebar { background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; max-height: calc(100vh - 130px); position: sticky; top: 52px; animation: slideInLeft 0.55s ease 0.15s both; }
+        .sb-section { padding: 16px; border-bottom: 1px solid var(--border); }
+        .sb-section:last-child { border-bottom: none; }
+        .sb-title { font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 11px; display: flex; align-items: center; gap: 7px; }
+        .sb-title::before { content: ''; width: 3px; height: 13px; background: var(--accent); border-radius: 2px; }
+
+        /* BASE LAYER BUTTONS */
+        .base-btns { display: flex; flex-direction: column; gap: 6px; }
+        .base-btn { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; border: 1.5px solid var(--border); background: #fafafa; cursor: pointer; font-size: 0.82rem; font-weight: 500; font-family: var(--font-body); color: var(--text); transition: all 0.18s; text-align: left; width: 100%; }
+        .base-btn:hover { border-color: var(--primary-light); background: #f0f9ff; }
+        .base-btn.active { border-color: var(--primary); background: #e0f2fe; color: var(--primary); }
+        .base-btn .bicon { font-size: 1.1rem; flex-shrink: 0; }
+        .base-btn .blabel { flex: 1; }
+        .base-btn .bcheck { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; transition: all 0.18s; }
+        .base-btn.active .bcheck { background: var(--primary); border-color: var(--primary); }
+
+        /* RISK TOGGLE BUTTONS */
+        .risk-btns { display: flex; flex-direction: column; gap: 6px; }
+        .risk-btn { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; font-size: 0.82rem; font-weight: 600; font-family: var(--font-body); color: var(--text); transition: all 0.18s; text-align: left; width: 100%; background: #fafafa; }
+        .risk-btn .r-swatch { width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0; border: 2px solid rgba(0,0,0,0.12); }
+        .risk-btn .r-label { flex: 1; }
+        .risk-btn .r-toggle { width: 32px; height: 18px; border-radius: 9px; background: #cbd5e1; position: relative; flex-shrink: 0; transition: background 0.2s; }
+        .risk-btn .r-toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: white; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .risk-btn.on .r-toggle { background: var(--primary); }
+        .risk-btn.on .r-toggle::after { transform: translateX(14px); }
+        .risk-btn[data-risk="alto"] { border-color: rgba(255,0,0,0.3); }
+        .risk-btn[data-risk="alto"]:hover, .risk-btn[data-risk="alto"].on { background: rgba(255,0,0,0.06); }
+        .risk-btn[data-risk="medio"] { border-color: rgba(200,200,0,0.35); }
+        .risk-btn[data-risk="medio"]:hover, .risk-btn[data-risk="medio"].on { background: rgba(220,220,0,0.07); }
+        .risk-btn[data-risk="bajo"] { border-color: rgba(0,180,0,0.3); }
+        .risk-btn[data-risk="bajo"]:hover, .risk-btn[data-risk="bajo"].on { background: rgba(17,200,0,0.06); }
+        .risk-btn[data-risk="vacia"] { border-color: rgba(106, 123, 248, 0.3); }
+        .risk-btn[data-risk="vacia"]:hover, .risk-btn[data-risk="vacia"].on { background: rgba(94, 136, 253, 0.06); }
+
+        /* VEREDA BUTTONS */
+        .vereda-btns { display: flex; flex-direction: column; gap: 5px; }
+        .all-btn { display: flex; align-items: center; justify-content: center; gap: 7px; padding: 9px; border-radius: 8px; background: var(--primary); color: white; border: none; cursor: pointer; font-size: 0.8rem; font-weight: 600; font-family: var(--font-body); margin-bottom: 8px; width: 100%; transition: background 0.18s, transform 0.15s; }
+        .all-btn:hover { background: var(--primary-light); transform: translateY(-1px); }
+        .vereda-btn { display: flex; align-items: center; gap: 9px; padding: 8px 12px; border-radius: 8px; border: 1.5px solid var(--border); background: #fafafa; cursor: pointer; font-size: 0.8rem; font-weight: 500; font-family: var(--font-body); color: var(--text); transition: all 0.16s; text-align: left; width: 100%; }
+        .vereda-btn:hover { border-color: var(--primary-light); background: #f0f9ff; }
+        .vereda-btn.on { border-color: var(--primary); background: #e0f2fe; color: var(--primary); }
+        .vereda-btn .v-icon { font-size: 1rem; flex-shrink: 0; }
+        .vereda-btn .v-label { flex: 1; }
+        .vereda-btn .v-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex-shrink: 0; transition: background 0.18s; }
+        .vereda-btn.on .v-dot { background: var(--primary); }
+
+        /* MAP ZONE */
+        .map-zone { display: flex; flex-direction: column; animation: fadeIn 0.5s ease 0.2s both; }
+        .map-container { position: relative; flex: 1; min-height: 600px; background: #d4e8ef; }
+        .map-container iframe { width: 100%; height: 100%; min-height: 600px; border: none; display: block; }
+        .map-loader { position: absolute; inset: 0; background: linear-gradient(135deg, #d4e8ef, #c8dde8); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; z-index: 20; transition: opacity 0.5s; }
+        .map-loader.gone { opacity: 0; pointer-events: none; }
+        .spinner { width: 40px; height: 40px; border: 3px solid rgba(0,95,115,0.18); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.85s linear infinite; }
+        .loader-txt { font-size: 0.82rem; color: var(--primary); font-weight: 500; }
+
+        /* FOOTER */
+        footer { background: var(--primary-dark); color: rgba(255,255,255,0.45); padding: 14px 5%; display: flex; align-items: center; justify-content: space-between; font-size: 0.72rem; }
+        footer a { color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
+        footer a:hover { color: rgba(255,255,255,0.85); }
+
+        /* ACTIONS */
+        .action-link { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.18s; margin-bottom: 7px; }
+        .action-link.primary { border: 1.5px solid var(--primary); color: var(--primary); }
+        .action-link.primary:hover { background: var(--primary); color: white; }
+        .action-link.secondary { border: 1.5px solid var(--border); color: var(--text-muted); }
+        .action-link.secondary:hover { background: #f1f5f9; color: var(--text); }
+
+        /* ANIMATIONS */
+        @keyframes heroIn { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-18px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.55; transform:scale(0.82); } }
+
+
+        /* ── RESPONSIVE MAPA ───────────────────────────────── */
+        @media (max-width: 860px) {
+            .layout { grid-template-columns: 1fr; }
+            .sidebar {
+                position: static;
+                max-height: 300px;
+                overflow-y: auto;
+                border-right: none;
+                border-bottom: 2px solid var(--border);
+            }
+            .map-container { min-height: 50vh; }
+            .map-container iframe { min-height: 50vh; }
+            .hero { padding: 20px 4%; }
+        }
+        @media (max-width: 500px) {
+            .hero h1 { font-size: 1.35rem; }
+            .hero-badges { gap: 5px; }
+            .badge { font-size: 0.68rem; padding: 3px 8px; }
+        }
+
+
+        /* ── MENÚ HAMBURGUESA (móvil) ─────────────────────── */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+            margin-left: auto;
+            background: none;
+            border: none;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* ── RESPONSIVE ────────────────────────────────────── */
+        @media (max-width: 860px) {
+            /* Hamburguesa visible */
+            .hamburger { display: flex; }
+
+            /* Menú oculto por defecto en móvil */
+            .menu-principal {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0; right: 0;
+                background: var(--primary-dark);
+                box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+                z-index: 999;
+            }
+            .menu-principal.open { display: flex; }
+
+            nav { position: sticky; top: 0; flex-wrap: wrap; padding: 0 4%; }
+
+            .menu-item { width: 100%; border-bottom: 1px solid rgba(255,255,255,0.08); }
+            .menu-item a { padding: 14px 16px; font-size: 0.95rem; }
+            .menu-item a::after { display: none; }
+
+            /* Dropdowns en móvil: desplegables al tocar */
+            .dropdown-content {
+                display: none;
+                position: static;
+                background: rgba(0,0,0,0.2);
+                border-radius: 0;
+                border-top: none;
+                border-left: 3px solid var(--accent);
+                box-shadow: none;
+                animation: none;
+            }
+            .dropdown-content.open { display: block; }
+            .dropdown-content a {
+                color: rgba(255,255,255,0.8) !important;
+                padding: 10px 28px !important;
+                border-bottom: 1px solid rgba(255,255,255,0.06);
+                font-size: 0.85rem !important;
+            }
+            .dropdown-content a:hover { background: rgba(255,255,255,0.08) !important; padding-left: 34px !important; color: white !important; }
+
+            /* Gov bar */
+            .gov-bar { padding: 8px 4%; }
+            .gov-bar img { height: 40px; }
+            .gov-bar-text { font-size: 0.65rem; }
+        }
+
+        @media (max-width: 600px) {
+            .gov-bar-text { display: none; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="gov-bar">
+    <img src="logo_castillo_transparente.png" alt="EBS+ Santander">
+    <span class="gov-bar-text">Equipos Basicos de Salud - Santander</span>
+</div>
+
+<nav>
+    <ul class="menu-principal">
+        <li class="menu-item"><a href="index.html">Inicio</a></li>
+        <li class="menu-item"><a href="#">Territorios</a></li>
+        <li class="menu-item"><a href="#" class="active">Cartografías ▾</a>
+            <div class="dropdown-content">
+                <a href="#">La Belleza</a>
+                <a href="#">Florian</a>
+                <a href="#">Puente Nacional</a>
+                <a href="#">Oiba</a>
+                <a href="#">Jesús María</a>
+                <a href="#">Enciso</a>
+                <a href="#" class="active-page">Sucre</a>
+            </div>
+        </li>
+        <li class="menu-item"><a href="#">Estadísticas ▾</a>
+            <div class="dropdown-content">
+                <a href="#">La Belleza</a>
+                <a href="#">Florian</a>
+                <a href="#">Puente Nacional</a>
+                <a href="#">Oiba</a>
+                <a href="#">Jesús María</a>
+                <a href="#">Enciso</a>
+                <a href="#">Sucre</a>
+            </div>
+        </li>
+        <li class="menu-item"><a href="#">Viviendas ▾</a>
+            <div class="dropdown-content">
+                <a href="#">La Belleza</a>
+                <a href="#">Florian</a>
+                <a href="#">Puente Nacional</a>
+                <a href="#">Oiba</a>
+                <a href="#">Jesús María</a>
+                <a href="#">Enciso</a>
+                <a href="#">Sucre</a>
+            </div>
+        </li>
+        <li class="menu-item"><a href="#">Aplicaciones ▾</a>
+            <div class="dropdown-content">
+                <a href="#">La Belleza</a>
+                <a href="#">Florian</a>
+                <a href="#">Puente Nacional</a>
+                <a href="#">Oiba</a>
+                <a href="#">Jesús María</a>
+                <a href="#">Enciso</a>
+                <a href="#">Sucre</a>
+            </div>
+        </li>
+    </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menú">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<div class="hero">
+    <div class="breadcrumb">
+        <a href="index.html">Inicio</a> <span>›</span>
+        <a href="#">Cartografías</a> <span>›</span>
+        <span style="color:rgba(255,255,255,0.85)">Sucre</span>
+    </div>
+    <h1>
+        <em>Cartografía · EBS+ 2026</em>
+        Municipio de Sucre
+    </h1>
+    <div class="hero-badges">
+        <div class="badge"><div class="badge-dot"></div> Mapa activo · 2026</div>
+        <div class="badge">📍 Santander, Colombia</div>
+        <div class="badge">🏠 2 veredas · 21 capas</div>
+    </div>
+</div>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <!-- CAPA BASE -->
+        <div class="sb-section">
+            <div class="sb-title">Capa base</div>
+            <div class="base-btns">
+                <button class="base-btn" data-base="satellite" onclick="setBase(this)">
+                    <span class="bicon">🛰️</span><span class="blabel">Satélite</span><span class="bcheck"></span>
+                </button>
+                <button class="base-btn active" data-base="terrain" onclick="setBase(this)">
+                    <span class="bicon">🏔️</span><span class="blabel">Terreno</span><span class="bcheck"></span>
+                </button>
+                <button class="base-btn" data-base="road" onclick="setBase(this)">
+                    <span class="bicon">🛣️</span><span class="blabel">Vías</span><span class="bcheck"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- CONVENCIONES DE RIESGO -->
+        <div class="sb-section">
+            <div class="sb-title">Convenciones de riesgo</div>
+            <div class="risk-btns">
+                <button class="risk-btn on" data-risk="alto" onclick="toggleRisk(this)">
+                    <div class="r-swatch" style="background:rgba(255,0,0,1);"></div>
+                    <span class="r-label">Riesgo Alto</span>
+                    <div class="r-toggle"></div>
+                </button>
+                <button class="risk-btn on" data-risk="medio" onclick="toggleRisk(this)">
+                    <div class="r-swatch" style="background:rgba(254,255,0,1); border-color:rgba(0,0,0,0.2);"></div>
+                    <span class="r-label">Riesgo Medio</span>
+                    <div class="r-toggle"></div>
+                </button>
+                <button class="risk-btn on" data-risk="bajo" onclick="toggleRisk(this)">
+                    <div class="r-swatch" style="background:rgba(17,255,0,1);"></div>
+                    <span class="r-label">Riesgo Bajo</span>
+                    <div class="r-toggle"></div>
+                </button>
+                <button class="risk-btn on" data-risk="vacia" onclick="toggleRisk(this)">
+                    <div class="r-swatch" style="background:rgb(104, 95, 242);"></div>
+                    <span class="r-label">Vacía / No habitada</span>
+                    <div class="r-toggle"></div>
+                </button>
+            </div>
+        </div>
+
+        <!-- VEREDAS -->
+        <div class="sb-section">
+            <div class="sb-title">Veredas</div>
+            <div class="vereda-btns">
+                <button class="all-btn" onclick="toggleAllVeredas()">🗺️ Activar / Desactivar todas</button>
+                <button class="vereda-btn on" data-vereda="PALMA" onclick="toggleVereda(this)">
+                    <span class="v-icon">🌴</span><span class="v-label">La Palma</span><span class="v-dot"></span>
+                </button>
+                <button class="vereda-btn on" data-vereda="CERRITOS" onclick="toggleVereda(this)">
+                    <span class="v-icon">⛰️</span><span class="v-label">Cerritos</span><span class="v-dot"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ACCIONES -->
+        <div class="sb-section">
+            <div class="sb-title">Acciones</div>
+            <a href="qgis2web_2026_03_28-11_46_15_662105/index.html" target="_blank" class="action-link primary">🗺️ Abrir mapa completo</a>
+            <a href="index.html" class="action-link secondary">← Volver al inicio</a>
+        </div>
+
+    </aside>
+
+    <!-- MAP -->
+    <div class="map-zone">
+        <div class="map-container" id="mapContainer">
+            <div class="map-loader" id="mapLoader">
+                <div class="spinner"></div>
+                <div class="loader-txt">Cargando cartografía de Sucre…</div>
+            </div>
+            <iframe
+                id="mapFrame"
+                src="qgis2web_2026_03_28-11_46_15_662105/index.html"
+                title="Cartografía La Palma EBS+"
+                onload="onMapReady()"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <span>© 2026 EBS+ Santander · Castillo</span>
+    <span>QGIS · qgis2web · OpenLayers</span>
+    <a href="index.html">← Inicio</a>
+</footer>
+
+<script>
+// ── MAP READY ──────────────────────────────────────────
+var mapReady = false;
+var pendingCmds = [];
+
+function onMapReady() {
+    setTimeout(() => {
+        document.getElementById('mapLoader').classList.add('gone');
+        mapReady = true;
+        pendingCmds.forEach(fn => fn());
+        pendingCmds = [];
+        // Default: terrain ON + labels (negrilla) ON
+        applyBase('terrain');
+    }, 1000);
+}
+
+function sendToMap(fn) {
+    if (mapReady) { fn(); } else { pendingCmds.push(fn); }
+}
+
+function getMap() {
+    try { return document.getElementById('mapFrame').contentWindow.map; }
+    catch(e) { return null; }
+}
+
+// ── BASE LAYER ─────────────────────────────────────────
+// layersList en este mapa: [group_Leyenda, lyr_Mapa3_12, lyr_Mapa2_13, lyr_Negrilla_14, lyr_Mapa1_15, group_PALMA, group_CERRITOS]
+// indices de base tiles en layersList: [1]=Mapa3(Terrain), [2]=Mapa2(Road), [3]=Negrilla(Labels), [4]=Mapa1(Satellite/Hybrid)
+
+function setBase(btn) {
+    document.querySelectorAll('.base-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyBase(btn.dataset.base);
+}
+
+function applyBase(type) {
+    sendToMap(() => {
+        const m = getMap();
+        if (!m) return;
+        const layers = m.getLayers().getArray();
+        // layers[0] = group_Leyenda (skip)
+        // layers[1] = lyr_Mapa3_12  → Terrain
+        // layers[2] = lyr_Mapa2_13  → Road
+        // layers[3] = lyr_Negrilla_14 → Labels
+        // layers[4] = lyr_Mapa1_15  → Satellite/Hybrid
+        // layers[5] = group_PALMA
+        // layers[6] = group_CERRITOS
+        const terrain   = layers[2];
+        const road      = layers[3];
+        const labels    = layers[3];
+        const satellite = layers[4];
+
+        if (!terrain || !road || !labels || !satellite) return;
+
+        if (type === 'satellite') {
+            terrain.setVisible(false);
+            road.setVisible(false);
+            labels.setVisible(false);
+            satellite.setVisible(true);
+        } else if (type === 'terrain') {
+            terrain.setVisible(true);
+            road.setVisible(false);
+            labels.setVisible(true);
+            satellite.setVisible(false);
+        } else if (type === 'road') {
+            terrain.setVisible(false);
+            road.setVisible(true);
+            labels.setVisible(true);
+            satellite.setVisible(false);
+        }
+    });
+}
+
+// ── RISK FILTER (por atributo RIESGO en cada feature) ──
+// El riesgo NO es una capa separada: es un valor del campo RIESGO
+// dentro de las capas vectoriales. Se filtra reemplazando el style
+// function de cada capa para devolver null en features ocultos.
+
+// Mapa de qué valores del campo RIESGO corresponden a cada categoría
+const riskValues = {
+    alto:  v => v === 'ROJO ALTO' || v === 'Riesgo Alto' || v === 'ALTO',
+    medio: v => v === 'AMARILLO MEDIO' || v === 'Riesgo Medio' || v === 'MEDIO',
+    bajo:  v => v === 'VERDE BAJO' || v === 'Riesgo Bajo' || v === 'BAJO',
+    vacia: v => v === 'Vacia' || v === 'VIVIENDA NO HABITADA' || v === 'NO HABITADA' || v === 'Vacía'
+};
+
+// Estado activo de cada categoría
+var riskState = { alto: true, medio: true, bajo: true, vacia: true };
+
+// Guarda los style functions originales de las capas vectoriales
+var originalStyles = new WeakMap();
+
+function toggleRisk(btn) {
+    btn.classList.toggle('on');
+    riskState[btn.dataset.risk] = btn.classList.contains('on');
+    applyRiskStyleFilter();
+}
+
+function applyRiskStyleFilter() {
+    sendToMap(() => {
+        const m = getMap();
+        if (!m) return;
+
+        // Recorre TODAS las capas vectoriales del mapa
+        m.getLayers().forEach(topLayer => {
+            processVectorLayer(topLayer);
+            if (topLayer.getLayers) {
+                topLayer.getLayers().forEach(layer => processVectorLayer(layer));
+            }
+        });
+
+        // Fuerza re-render
+        m.render();
+    });
+}
+
+function processVectorLayer(layer) {
+    if (!layer || !layer.getSource || !layer.setStyle) return;
+    const src = layer.getSource();
+    if (!src || !src.getFeatures) return; // solo Vector layers
+
+    // Guarda el style original la primera vez
+    if (!originalStyles.has(layer)) {
+        originalStyles.set(layer, layer.getStyle());
+    }
+    const origStyle = originalStyles.get(layer);
+
+    // Instala un wrapper que filtra por RIESGO
+    layer.setStyle(function(feature, resolution) {
+        const riesgo = feature.get('RIESGO') || '';
+        // Determina a qué categoría pertenece este feature
+        for (const [cat, matchFn] of Object.entries(riskValues)) {
+            if (matchFn(riesgo)) {
+                // Si la categoría está desactivada → ocultar (null)
+                if (!riskState[cat]) return null;
+                break;
+            }
+        }
+        // Aplica el estilo original (función o estilo fijo)
+        if (typeof origStyle === 'function') {
+            return origStyle(feature, resolution);
+        }
+        return origStyle;
+    });
+}
+
+// ── VEREDA TOGGLE ──────────────────────────────────────
+// Los grupos de vereda tienen title: 'PALMA' y 'CERRITOS'
+
+function toggleVereda(btn) {
+    btn.classList.toggle('on');
+    applyVeredaFilter(btn.dataset.vereda, btn.classList.contains('on'));
+}
+
+function applyVeredaFilter(veredaTitle, visible) {
+    sendToMap(() => {
+        const m = getMap();
+        if (!m) return;
+        m.getLayers().forEach(layer => {
+            if (layer.getLayers && layer.get('title') === veredaTitle) {
+                layer.setVisible(visible);
+            }
+        });
+    });
+}
+
+// ── ALL VEREDAS ────────────────────────────────────────
+var allOn = true;
+
+function toggleAllVeredas() {
+    allOn = !allOn;
+    document.querySelectorAll('.vereda-btn').forEach(btn => {
+        allOn ? btn.classList.add('on') : btn.classList.remove('on');
+        applyVeredaFilter(btn.dataset.vereda, allOn);
+    });
+}
+
+// ── MENÚ HAMBURGUESA ──────────────────────────────────
+function toggleMenu() {
+    const menu = document.querySelector('.menu-principal');
+    const btn = document.getElementById('hamburger');
+    menu.classList.toggle('open');
+    btn.classList.toggle('open');
+}
+
+// Dropdowns táctiles en móvil
+document.querySelectorAll('.menu-item > a').forEach(link => {
+    link.addEventListener('click', function(e) {
+        if (window.innerWidth > 860) return;
+        const dropdown = this.parentElement.querySelector('.dropdown-content');
+        if (!dropdown) return;
+        e.preventDefault();
+        dropdown.classList.toggle('open');
+    });
+});
+
+// Cerrar menú al hacer clic fuera
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('nav')) {
+        document.querySelector('.menu-principal')?.classList.remove('open');
+        document.getElementById('hamburger')?.classList.remove('open');
+    }
+});
+
+</script>
+
+</body>
+</html>
