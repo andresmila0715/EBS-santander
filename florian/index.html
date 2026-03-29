@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="./resources/ol.css">
+        <link rel="stylesheet" href="resources/fontawesome-all.min.css">
+        <link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
+        <link rel="stylesheet" href="./resources/qgis2web.css">
+        <style>
+        html, body {
+            background-color: #ffffff;
+        }
+        .ol-control > * {
+            background-color: #f8f8f8!important;
+            color: #444444!important;
+            border-radius: 0px;
+        }
+        .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
+            color: #444444!important;
+        }
+        .search-layer-input-search {
+            background-color: #f8f8f8!important;
+        }
+        .ol-control > *:focus, .ol-control >*:hover {
+            background-color: rgba(248, 248, 248, 0.7)!important;
+        } 
+        .ol-control {
+            background-color: rgba(255,255,255,.4) !important;
+            padding: 2px !important;
+        } 
+        </style>
+
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+            <div id="popup" class="ol-popup">
+                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                <div id="popup-content"></div>
+            </div>
+        </div>
+        <script src="resources/qgis2web_expressions.js"></script>
+        <script src="./resources/functions.js"></script>
+        <script src="./resources/ol.js"></script>
+        <script src="./resources/ol-layerswitcher.js"></script>
+        <script src="resources/photon-geocoder-autocomplete.min.js"></script>
+        <script src="layers/RiesgoAltoNoHabitada_4.js"></script><script src="layers/RiesgoAltoHabitadaOcasionalmente_5.js"></script><script src="layers/RiesgoAltoNoEfectiva_6.js"></script><script src="layers/RiesgoAltoEfectiva_7.js"></script><script src="layers/RiesgoAltoEfectivaSinpatologias_8.js"></script><script src="layers/RiesgoMedioNoHabitda_9.js"></script><script src="layers/RiesgoMedioHabitadaOcasionalmente_10.js"></script><script src="layers/RiesgoMedioNoEfectiva_11.js"></script><script src="layers/RiesgoMedioEfectiva_12.js"></script><script src="layers/RiesgoMedioEfectivaSinpatologias_13.js"></script><script src="layers/RiesgoBajoNoHabitada_14.js"></script><script src="layers/RiesgoBajoHabitadaOcasionalmente_15.js"></script><script src="layers/RiesgoBajoNoEfectiva_16.js"></script><script src="layers/RiesgoBajoEfectiva_17.js"></script><script src="layers/RiesgoBajoEfectivaSinpatologias_18.js"></script><script src="layers/LimitesOtroMundo_19.js"></script><script src="layers/LimitesVentaColes_20.js"></script><script src="layers/LimitesSanAntonio_21.js"></script><script src="layers/LimitesLucitania_22.js"></script><script src="layers/LimitesSantaCruz_23.js"></script><script src="layers/LimitesSanGil_24.js"></script><script src="layers/LimitesLomadeVelez_25.js"></script><script src="layers/LimitesLaColorada_26.js"></script><script src="layers/LimitesElZarval_27.js"></script><script src="layers/LimitesSanJoseAlto_28.js"></script><script src="layers/LimitesVILLACATALINA_29.js"></script><script src="layers/LimitesVILLASDETISQUIZOQUE_30.js"></script><script src="layers/LimitesCasacote_31.js"></script><script src="layers/LimitesSANTAHELENA_32.js"></script><script src="layers/LimitesBuenosAires_33.js"></script><script src="layers/LimitesCorazondelEden_34.js"></script><script src="layers/LimitesPLAZANUEVA_35.js"></script><script src="layers/LimitesLaUnion_36.js"></script><script src="layers/LimitesCentro_37.js"></script><script src="layers/Limitessanjose_38.js"></script><script src="layers/LimitesGUAYMARAL_39.js"></script>
+        <script src="styles/RiesgoAltoNoHabitada_4_style.js"></script><script src="styles/RiesgoAltoHabitadaOcasionalmente_5_style.js"></script><script src="styles/RiesgoAltoNoEfectiva_6_style.js"></script><script src="styles/RiesgoAltoEfectiva_7_style.js"></script><script src="styles/RiesgoAltoEfectivaSinpatologias_8_style.js"></script><script src="styles/RiesgoMedioNoHabitda_9_style.js"></script><script src="styles/RiesgoMedioHabitadaOcasionalmente_10_style.js"></script><script src="styles/RiesgoMedioNoEfectiva_11_style.js"></script><script src="styles/RiesgoMedioEfectiva_12_style.js"></script><script src="styles/RiesgoMedioEfectivaSinpatologias_13_style.js"></script><script src="styles/RiesgoBajoNoHabitada_14_style.js"></script><script src="styles/RiesgoBajoHabitadaOcasionalmente_15_style.js"></script><script src="styles/RiesgoBajoNoEfectiva_16_style.js"></script><script src="styles/RiesgoBajoEfectiva_17_style.js"></script><script src="styles/RiesgoBajoEfectivaSinpatologias_18_style.js"></script><script src="styles/LimitesOtroMundo_19_style.js"></script><script src="styles/LimitesVentaColes_20_style.js"></script><script src="styles/LimitesSanAntonio_21_style.js"></script><script src="styles/LimitesLucitania_22_style.js"></script><script src="styles/LimitesSantaCruz_23_style.js"></script><script src="styles/LimitesSanGil_24_style.js"></script><script src="styles/LimitesLomadeVelez_25_style.js"></script><script src="styles/LimitesLaColorada_26_style.js"></script><script src="styles/LimitesElZarval_27_style.js"></script><script src="styles/LimitesSanJoseAlto_28_style.js"></script><script src="styles/LimitesVILLACATALINA_29_style.js"></script><script src="styles/LimitesVILLASDETISQUIZOQUE_30_style.js"></script><script src="styles/LimitesCasacote_31_style.js"></script><script src="styles/LimitesSANTAHELENA_32_style.js"></script><script src="styles/LimitesBuenosAires_33_style.js"></script><script src="styles/LimitesCorazondelEden_34_style.js"></script><script src="styles/LimitesPLAZANUEVA_35_style.js"></script><script src="styles/LimitesLaUnion_36_style.js"></script><script src="styles/LimitesCentro_37_style.js"></script><script src="styles/Limitessanjose_38_style.js"></script><script src="styles/LimitesGUAYMARAL_39_style.js"></script>
+        <script src="./layers/layers.js" type="text/javascript"></script> 
+        <script src="./resources/Autolinker.min.js"></script>
+        <script src="./resources/qgis2web.js"></script>        
+    </body>
+</html>

@@ -1,0 +1,1 @@
+var json_RiesgoAltoNoHabitada_4 = {"type":"FeatureCollection","name":"RiesgoAltoNoHabitada_4","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"id":"480"},"geometry":{"type":"Point","coordinates":[-73.970713127561197,5.802899249898134]}}]}
