@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartografía · EBS+ Santander</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- ============================================================
+  🔧  ZONA DE CONFIGURACIÓN  —  Solo edita este bloque
+  ============================================================ -->
+<script>
+var CONFIG = {
+
+    // ── 1. MUNICIPIO ──────────────────────────────────────────
+    municipio:  "Jesús María",
+    año:        "2025",
+
+    // ── 2. CARPETA QGIS2WEB ───────────────────────────────────
+    // Nombre EXACTO de la carpeta generada por qgis2web
+    qgisFolder: "Puente Nacional",
+
+    // ── 3. VEREDAS ────────────────────────────────────────────
+    // Este mapa NO usa grupos por vereda: cada vereda es una capa individual.
+    // El control de veredas filtra por 'popuplayertitle' de cada capa vectorial.
+    // id    = valor exacto de popuplayertitle en layers.js
+    // label = nombre bonito para el sidebar
+    // icon  = emoji
+    veredas: [
+        { id: "Capas - MONTES",               label: "Montes",                icon: "⛰️" },
+        { id: "Capas — Barrio chico",          label: "Barrio Chico",          icon: "🏘️" },
+        { id: "Capas — Centro",                label: "Centro",                icon: "🏙️" },
+        { id: "Capas — La Florida",            label: "La Florida",            icon: "🌿" },
+        { id: "Capas — La Union",              label: "La Unión",              icon: "🤝" },
+        { id: "Capas — Las Palmeras",          label: "Las Palmeras",          icon: "🌴" },
+        { id: "Capas — Palacio",               label: "Palacio",               icon: "🏛️" },
+        { id: "Capas - Petaqueros 2 ",         label: "Petaqueros 2",          icon: "🌾" },
+        { id: "Capas — PETAQUEROS 1",          label: "Petaqueros 1",          icon: "🌾" },
+        { id: "Capas — San Fernando",          label: "San Fernando",          icon: "⛪" },
+        { id: "Capas — Santa Rosa",            label: "Santa Rosa",            icon: "🌹" },
+        { id: "Capas — Semisa 1",              label: "Semisa 1",              icon: "🗺️" },
+        { id: "Capas- Semisa 2",               label: "Semisa 2",              icon: "🗺️" },
+        { id: "Capas - Semisa 3",              label: "Semisa 3",              icon: "🗺️" },
+        { id: "Capas — Semisa 4",              label: "Semisa 4",              icon: "🗺️" },
+        { id: "Capas — Villa Campestre",       label: "Villa Campestre",       icon: "🏡" },
+        { id: "Capas — Villa Vieja",           label: "Villa Vieja",           icon: "🏚️" },
+        { id: "culebrilla",                    label: "Culebrilla",            icon: "🐍" },
+        { id: "Capas — Cuevas",                label: "Cuevas",                icon: "🪨" },
+        { id: "Capas — Escuelas",              label: "Escuelas",              icon: "🏫" },
+        { id: "Capas - Agua Fria",             label: "Agua Fría",             icon: "💧" },
+        { id: "Capas - Bravo Paez A",          label: "Bravo Páez A",          icon: "🏞️" },
+        { id: "Capas - Bravo Paez B",          label: "Bravo Páez B",          icon: "🏞️" },
+        { id: "Capas - Loma de Hoyos ",        label: "Loma de Hoyos",         icon: "🌄" },
+        { id: "Capas - Alto Cruces",           label: "Alto Cruces",           icon: "✝️" },
+        { id: "Capas - San Vicente Bajo",      label: "San Vicente Bajo",      icon: "🏘️" },
+        { id: "Capas - San Vicente Alto",      label: "San Vicente Alto",      icon: "🏔️" },
+        { id: "Capas - Piedealto",             label: "Piedealto",             icon: "🪨" },
+        { id: "Capas - Santa Rita",            label: "Santa Rita",            icon: "🌸" },
+        { id: "Capas - Chiquinta",             label: "Chiquinta",             icon: "🌱" },
+        { id: "Capas - Corbaraque",            label: "Corbaraque",            icon: "🌿" },
+        { id: "Capas - Poazaque",              label: "Poazaque",              icon: "🏡" },
+        { id: "Capas - La Retirada",           label: "La Retirada",           icon: "🛖" },
+        { id: "Capas - Canoas",                label: "Canoas",                icon: "🛶" },
+        { id: "Capas - Mompox",               label: "Mompox",                icon: "🌅" },
+        { id: "Capas - Jardines Del Recuerdo", label: "Jardines del Recuerdo", icon: "🌺" },
+        { id: "Capas - Pescaderito",           label: "Pescaderito",           icon: "🐟" },
+        { id: "Capas - La Feria",              label: "La Feria",              icon: "🎪" },
+        { id: "Capas - El Saman",              label: "El Samán",              icon: "🌳" },
+        { id: "Capas - Alto Grande",           label: "Alto Grande",           icon: "⛰️" },
+        { id: "Capas - Resguardo",             label: "Resguardo",             icon: "🏕️" },
+        { id: "Capas - Cabrera Alta",          label: "Cabrera Alta",          icon: "🏔️" },
+        { id: "Capas - Portachuelo",           label: "Portachuelo",           icon: "🚪" },
+        { id: "Capas - Barro Blanco",          label: "Barro Blanco",          icon: "🏖️" },
+        { id: "Capas - Cabrera Baja",          label: "Cabrera Baja",          icon: "🌾" },
+        { id: "Capas - El Oscuro",             label: "El Oscuro",             icon: "🌑" },
+        { id: "Capas - Laderas",               label: "Laderas",               icon: "⛺" },
+        { id: "Capas - Cristales",             label: "Cristales",             icon: "💎" },
+        { id: "Capas - Casco Urbano",          label: "Casco Urbano",          icon: "🏙️" },
+        { id: "Capas - Angostura",             label: "Angostura",             icon: "🌉" },
+        { id: "Capas - Buenos Aires",          label: "Buenos Aires",          icon: "🌆" },
+        { id: "Capas -Arciniegas",             label: "Arciniegas",            icon: "🏘️" },
+    ],
+
+    // ── 4. ÍNDICES DE CAPAS BASE ──────────────────────────────
+    // Este mapa: 0=GoogleTerrain, 1=GoogleRoad, 2=GoogleLabels, 3=GoogleHybrid
+    // Las veredas son capas individuales (no grupos), así que layerIndex
+    // solo aplica a las 4 capas base de fondo.
+    layerIndex: {
+        terrain:   0,
+        road:      1,
+        labels:    2,
+        satellite: 3,
+    },
+
+    // ── 5. LOGO Y ORGANIZACIÓN ────────────────────────────────
+    logoSrc:  "logo_castillo_transparente.png",
+    orgName:  "Equipos Básicos de Salud - Santander",
+    orgShort: "EBS+ Santander",
+
+    // ── 6. VALORES DEL CAMPO "RIESGO" ─────────────────────────
+    // Este mapa SÍ usa capas separadas por riesgo (no un campo RIESGO),
+    // pero se deja configurado por compatibilidad con la plantilla.
+    riskValues: {
+        alto:  ["ROJO ALTO", "Riesgo Alto", "ALTO"],
+        medio: ["AMARILLO MEDIO", "Riesgo Medio", "MEDIO"],
+        bajo:  ["VERDE BAJO", "Riesgo Bajo", "BAJO"],
+        vacia: ["Vacia", "Vacía", "VIVIENDA NO HABITADA", "NO HABITADA"],
+    },
+
+    // ── 7. SECCIÓN ACTIVA EN EL MENÚ ─────────────────────────
+    seccionActiva: "cartografias",
+
+    // ── 8. MENÚ DE MUNICIPIOS ─────────────────────────────────
+    menuMunicipios: {
+        cartografias: [
+            { label: "La Belleza",      href: "cartografia_labelleza.html" },
+            { label: "Florian",         href: "Florian.html" },
+            { label: "Puente Nacional", href: "Puente Nacional.html" },
+            { label: "Oiba",            href: "Oiba.html" },
+            { label: "Jesús María",     href: "Jesus Maria.html" },
+            { label: "Enciso",          href: "cartografia_enciso.html" },
+            { label: "Sucre",           href: "indexcar.html" },
+        ],
+        estadisticas: [
+            { label: "La Belleza",      href: "#" },
+            { label: "Florian",         href: "#" },
+            { label: "Puente Nacional", href: "#" },
+            { label: "Oiba",            href: "#" },
+            { label: "Jesús María",     href: "#" },
+            { label: "Enciso",          href: "#" },
+            { label: "Sucre",           href: "#" },
+        ],
+        viviendas: [
+            { label: "La Belleza",      href: "#" },
+            { label: "Florian",         href: "#" },
+            { label: "Puente Nacional", href: "#" },
+            { label: "Oiba",            href: "#" },
+            { label: "Jesús María",     href: "#" },
+            { label: "Enciso",          href: "#" },
+            { label: "Sucre",           href: "#" },
+        ],
+        aplicaciones: [
+            { label: "La Belleza",      href: "#" },
+            { label: "Florian",         href: "#" },
+            { label: "Puente Nacional", href: "#" },
+            { label: "Oiba",            href: "#" },
+            { label: "Jesús María",     href: "#" },
+            { label: "Enciso",          href: "#" },
+            { label: "Sucre",           href: "#" },
+        ],
+    },
+};
+</script>
+<!-- ============================================================
+  FIN DE CONFIGURACIÓN
+  ============================================================ -->
+
+<!-- ── FUNCIONES GLOBALES en <head> para que el iframe las encuentre ── -->
+<script>
+    var mapReady       = false;
+    var pendingCmds    = [];
+    var riskState      = { alto: true, medio: true, bajo: true, vacia: true };
+    var originalStyles = new WeakMap();
+    var allOn          = true;
+
+    function onMapReady() {
+        setTimeout(function() {
+            var loader = document.getElementById('mapLoader');
+            if (loader) loader.classList.add('gone');
+            mapReady = true;
+            pendingCmds.forEach(function(fn){ fn(); });
+            pendingCmds = [];
+            applyBase('terrain');
+        }, 1000);
+    }
+
+    function sendToMap(fn) {
+        if (mapReady) { fn(); } else { pendingCmds.push(fn); }
+    }
+
+    function getMap() {
+        try { return document.getElementById('mapFrame').contentWindow.map; }
+        catch(e) { return null; }
+    }
+
+    // ── Capa Base ─────────────────────────────────────────────
+    function setBase(btn) {
+        document.querySelectorAll('.base-btn').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        applyBase(btn.dataset.base);
+    }
+
+    function applyBase(type) {
+        sendToMap(function() {
+            var m = getMap();
+            if (!m) return;
+            var layers    = m.getLayers().getArray();
+            var idx       = CONFIG.layerIndex;
+            var terrain   = layers[idx.terrain];
+            var road      = layers[idx.road];
+            var labels    = layers[idx.labels];
+            var satellite = layers[idx.satellite];
+            if (!terrain || !road || !satellite) return;
+            terrain.setVisible(type === 'terrain');
+            road.setVisible(type === 'road');
+            if (labels) labels.setVisible(type === 'terrain' || type === 'road');
+            satellite.setVisible(type === 'satellite');
+        });
+    }
+
+    // ── Riesgo (por campo en features) ────────────────────────
+    function toggleRisk(btn) {
+        btn.classList.toggle('on');
+        riskState[btn.dataset.risk] = btn.classList.contains('on');
+        applyRiskStyleFilter();
+    }
+
+    function applyRiskStyleFilter() {
+        sendToMap(function() {
+            var m = getMap();
+            if (!m) return;
+            m.getLayers().forEach(function(topLayer) {
+                processVectorLayer(topLayer);
+                if (topLayer.getLayers) {
+                    topLayer.getLayers().forEach(function(layer){ processVectorLayer(layer); });
+                }
+            });
+            m.render();
+        });
+    }
+
+    function processVectorLayer(layer) {
+        if (!layer || !layer.getSource || !layer.setStyle) return;
+        var src = layer.getSource();
+        if (!src || !src.getFeatures) return;
+        if (!originalStyles.has(layer)) {
+            originalStyles.set(layer, layer.getStyle());
+        }
+        var origStyle = originalStyles.get(layer);
+        var rv = CONFIG.riskValues;
+        layer.setStyle(function(feature, resolution) {
+            var riesgo = feature.get('RIESGO') || '';
+            var cats = Object.keys(rv);
+            for (var i = 0; i < cats.length; i++) {
+                var cat = cats[i];
+                if (rv[cat].indexOf(riesgo) !== -1) {
+                    if (!riskState[cat]) return null;
+                    break;
+                }
+            }
+            return typeof origStyle === 'function' ? origStyle(feature, resolution) : origStyle;
+        });
+    }
+
+    // ── Veredas — por popuplayertitle (capas individuales) ────
+    function toggleVereda(btn) {
+        btn.classList.toggle('on');
+        applyVeredaFilter(btn.dataset.vereda, btn.classList.contains('on'));
+    }
+
+    function applyVeredaFilter(popupTitle, visible) {
+        sendToMap(function() {
+            var m = getMap();
+            if (!m) return;
+            m.getLayers().forEach(function(layer) {
+                // Capas individuales (no grupos): comparar por popuplayertitle
+                var pt = layer.get('popuplayertitle');
+                if (pt && pt.trim() === popupTitle.trim()) {
+                    layer.setVisible(visible);
+                }
+            });
+        });
+    }
+
+    function toggleAllVeredas() {
+        allOn = !allOn;
+        document.querySelectorAll('.vereda-btn').forEach(function(btn) {
+            allOn ? btn.classList.add('on') : btn.classList.remove('on');
+            applyVeredaFilter(btn.dataset.vereda, allOn);
+        });
+    }
+
+    // ── Menú hamburguesa ──────────────────────────────────────
+    function toggleMenu() {
+        document.querySelector('.menu-principal').classList.toggle('open');
+        document.getElementById('hamburger').classList.toggle('open');
+    }
+</script>
+
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-light: #0a9396;
+            --primary-dark: #003d4d;
+            --accent: #d11d5b;
+            --bg: #f0f4f8;
+            --surface: #ffffff;
+            --text: #1a2332;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 10px;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'DM Sans', system-ui, sans-serif;
+            --sidebar-w: 290px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+        /* GOV BAR */
+        .gov-bar { background: var(--primary-dark); padding: 10px 8%; display: flex; align-items: center; gap: 12px; }
+        .gov-bar img { height: 60px; filter: brightness(1.1); }
+        .gov-bar-text { color: rgba(255,255,255,0.7); font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; }
+
+        /* NAV */
+        nav { background: var(--primary); padding: 0 8%; display: flex; align-items: center; box-shadow: 0 2px 12px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 1000; }
+        .menu-principal { display: flex; list-style: none; gap: 0; }
+        .menu-item { position: relative; }
+        .menu-item > a { display: block; color: rgba(255,255,255,0.9); text-decoration: none; font-weight: 500; font-size: 0.9rem; letter-spacing: 0.02em; padding: 20px 18px; transition: color 0.2s, background 0.2s; position: relative; }
+        .menu-item > a::after { content: ''; position: absolute; bottom: 0; left: 18px; right: 18px; height: 2px; background: var(--accent); transform: scaleX(0); transition: transform 0.25s ease; border-radius: 2px 2px 0 0; }
+        .menu-item:hover > a { color: #fff; background: rgba(255,255,255,0.08); }
+        .menu-item:hover > a::after { transform: scaleX(1); }
+        .menu-item > a.active::after { transform: scaleX(1); }
+        .dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: var(--surface); min-width: 220px; box-shadow: 0 20px 50px rgba(0,0,0,0.12); border-radius: 0 0 12px 12px; border-top: 2px solid var(--accent); overflow: hidden; z-index: 999; }
+        .menu-item:hover .dropdown-content { display: block; animation: fadeDown 0.2s ease; }
+        .dropdown-content a { color: var(--text) !important; padding: 11px 18px !important; font-size: 0.875rem !important; border-bottom: 1px solid var(--border); transition: background 0.15s, padding-left 0.15s !important; display: block; font-weight: 500; }
+        .dropdown-content a::after { display: none !important; }
+        .dropdown-content a:hover { background: #f0f9ff !important; padding-left: 24px !important; color: var(--primary) !important; }
+        .dropdown-content a.active-page { color: var(--primary) !important; background: #e0f2fe !important; font-weight: 600 !important; }
+        @keyframes fadeDown { from { transform: translateY(-8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* HAMBURGUESA */
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; margin-left: auto; background: none; border: none; }
+        .hamburger span { display: block; width: 24px; height: 2px; background: white; border-radius: 2px; transition: all 0.3s ease; }
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* HERO */
+        .hero { background: linear-gradient(130deg, var(--primary-dark) 0%, #004d60 55%, var(--primary-light) 100%); padding: 36px 5% 30px; position: relative; overflow: hidden; animation: heroIn 0.6s ease both; }
+        .hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 280px; height: 280px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+        .breadcrumb { display: flex; align-items: center; gap: 7px; color: rgba(255,255,255,0.5); font-size: 0.76rem; margin-bottom: 14px; }
+        .breadcrumb a { color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: rgba(255,255,255,0.9); }
+        .hero h1 { font-family: var(--font-display); color: white; font-size: clamp(1.7rem, 3.5vw, 2.6rem); font-weight: 700; line-height: 1.1; position: relative; z-index: 1; }
+        .hero h1 em { font-style: normal; display: block; color: rgba(255,255,255,0.55); font-size: 0.58em; font-family: var(--font-body); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+        .hero-badges { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+        .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.1); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.16); color: rgba(255,255,255,0.88); font-size: 0.75rem; font-weight: 500; padding: 5px 13px; border-radius: 30px; }
+        .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 6px #4ade80; animation: pulse 2s infinite; }
+
+        /* LAYOUT */
+        .layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: calc(100vh - 180px); }
+
+        /* SIDEBAR */
+        .sidebar { background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; max-height: calc(100vh - 130px); position: sticky; top: 61px; animation: slideInLeft 0.55s ease 0.15s both; }
+        .sb-section { padding: 16px; border-bottom: 1px solid var(--border); }
+        .sb-section:last-child { border-bottom: none; }
+        .sb-title { font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 11px; display: flex; align-items: center; gap: 7px; }
+        .sb-title::before { content: ''; width: 3px; height: 13px; background: var(--accent); border-radius: 2px; }
+
+        /* BASE LAYER */
+        .base-btns { display: flex; flex-direction: column; gap: 6px; }
+        .base-btn { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; border: 1.5px solid var(--border); background: #fafafa; cursor: pointer; font-size: 0.82rem; font-weight: 500; font-family: var(--font-body); color: var(--text); transition: all 0.18s; text-align: left; width: 100%; }
+        .base-btn:hover { border-color: var(--primary-light); background: #f0f9ff; }
+        .base-btn.active { border-color: var(--primary); background: #e0f2fe; color: var(--primary); }
+        .base-btn .bicon { font-size: 1.1rem; flex-shrink: 0; }
+        .base-btn .blabel { flex: 1; }
+        .base-btn .bcheck { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; transition: all 0.18s; }
+        .base-btn.active .bcheck { background: var(--primary); border-color: var(--primary); }
+
+        /* RIESGO */
+        .risk-btns { display: flex; flex-direction: column; gap: 6px; }
+        .risk-btn { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; font-size: 0.82rem; font-weight: 600; font-family: var(--font-body); color: var(--text); transition: all 0.18s; text-align: left; width: 100%; background: #fafafa; }
+        .risk-btn .r-swatch { width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0; border: 2px solid rgba(0,0,0,0.12); }
+        .risk-btn .r-label { flex: 1; }
+        .risk-btn .r-toggle { width: 32px; height: 18px; border-radius: 9px; background: #cbd5e1; position: relative; flex-shrink: 0; transition: background 0.2s; }
+        .risk-btn .r-toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: white; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .risk-btn.on .r-toggle { background: var(--primary); }
+        .risk-btn.on .r-toggle::after { transform: translateX(14px); }
+        .risk-btn[data-risk="alto"]  { border-color: rgba(255,0,0,0.3); }
+        .risk-btn[data-risk="alto"]:hover,  .risk-btn[data-risk="alto"].on  { background: rgba(255,0,0,0.06); }
+        .risk-btn[data-risk="medio"] { border-color: rgba(200,200,0,0.35); }
+        .risk-btn[data-risk="medio"]:hover, .risk-btn[data-risk="medio"].on { background: rgba(220,220,0,0.07); }
+        .risk-btn[data-risk="bajo"]  { border-color: rgba(0,180,0,0.3); }
+        .risk-btn[data-risk="bajo"]:hover,  .risk-btn[data-risk="bajo"].on  { background: rgba(17,200,0,0.06); }
+        .risk-btn[data-risk="vacia"] { border-color: rgba(106,123,248,0.3); }
+        .risk-btn[data-risk="vacia"]:hover, .risk-btn[data-risk="vacia"].on { background: rgba(94,136,253,0.06); }
+
+        /* VEREDAS */
+        .vereda-btns { display: flex; flex-direction: column; gap: 5px; }
+
+        /* Buscador de veredas */
+        .vereda-search { width: 100%; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.8rem; font-family: var(--font-body); color: var(--text); background: #fafafa; margin-bottom: 8px; outline: none; transition: border-color 0.18s; }
+        .vereda-search:focus { border-color: var(--primary-light); background: #fff; }
+
+        .all-btn { display: flex; align-items: center; justify-content: center; gap: 7px; padding: 9px; border-radius: 8px; background: var(--primary); color: white; border: none; cursor: pointer; font-size: 0.8rem; font-weight: 600; font-family: var(--font-body); margin-bottom: 8px; width: 100%; transition: background 0.18s, transform 0.15s; }
+        .all-btn:hover { background: var(--primary-light); transform: translateY(-1px); }
+        .vereda-btn { display: flex; align-items: center; gap: 9px; padding: 8px 12px; border-radius: 8px; border: 1.5px solid var(--border); background: #fafafa; cursor: pointer; font-size: 0.8rem; font-weight: 500; font-family: var(--font-body); color: var(--text); transition: all 0.16s; text-align: left; width: 100%; }
+        .vereda-btn:hover { border-color: var(--primary-light); background: #f0f9ff; }
+        .vereda-btn.on { border-color: var(--primary); background: #e0f2fe; color: var(--primary); }
+        .vereda-btn.hidden { display: none; }
+        .vereda-btn .v-icon { font-size: 1rem; flex-shrink: 0; }
+        .vereda-btn .v-label { flex: 1; }
+        .vereda-btn .v-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex-shrink: 0; transition: background 0.18s; }
+        .vereda-btn.on .v-dot { background: var(--primary); }
+
+        /* MAPA */
+        .map-zone { display: flex; flex-direction: column; animation: fadeIn 0.5s ease 0.2s both; }
+        .map-container { position: relative; flex: 1; min-height: 600px; background: #d4e8ef; }
+        .map-container iframe { width: 100%; height: 100%; min-height: 600px; border: none; display: block; }
+        .map-loader { position: absolute; inset: 0; background: linear-gradient(135deg, #d4e8ef, #c8dde8); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; z-index: 20; transition: opacity 0.5s; }
+        .map-loader.gone { opacity: 0; pointer-events: none; }
+        .spinner { width: 40px; height: 40px; border: 3px solid rgba(0,95,115,0.18); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.85s linear infinite; }
+        .loader-txt { font-size: 0.82rem; color: var(--primary); font-weight: 500; }
+
+        /* ACCIONES */
+        .action-link { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.18s; margin-bottom: 7px; }
+        .action-link.primary { border: 1.5px solid var(--primary); color: var(--primary); }
+        .action-link.primary:hover { background: var(--primary); color: white; }
+        .action-link.secondary { border: 1.5px solid var(--border); color: var(--text-muted); }
+        .action-link.secondary:hover { background: #f1f5f9; color: var(--text); }
+
+        /* FOOTER */
+        footer { background: var(--primary-dark); color: rgba(255,255,255,0.45); padding: 14px 5%; display: flex; align-items: center; justify-content: space-between; font-size: 0.72rem; }
+        footer a { color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
+        footer a:hover { color: rgba(255,255,255,0.85); }
+
+        /* ANIMACIONES */
+        @keyframes heroIn      { from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes slideInLeft { from { opacity:0; transform:translateX(-18px); } to { opacity:1; transform:translateX(0); } }
+        @keyframes fadeIn      { from { opacity:0; } to { opacity:1; } }
+        @keyframes spin        { to { transform:rotate(360deg); } }
+        @keyframes pulse       { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.55;transform:scale(.82);} }
+
+        /* RESPONSIVE */
+        @media (max-width: 860px) {
+            .hamburger { display: flex; }
+            .menu-principal { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: var(--primary-dark); box-shadow: 0 8px 24px rgba(0,0,0,0.2); z-index: 999; }
+            .menu-principal.open { display: flex; }
+            nav { position: sticky; top: 0; flex-wrap: wrap; padding: 0 4%; }
+            .menu-item { width: 100%; border-bottom: 1px solid rgba(255,255,255,0.08); }
+            .menu-item > a { padding: 14px 16px; font-size: 0.95rem; }
+            .menu-item > a::after { display: none; }
+            .dropdown-content { display: none; position: static; background: rgba(0,0,0,0.2); border-radius: 0; border-top: none; border-left: 3px solid var(--accent); box-shadow: none; animation: none; }
+            .dropdown-content.open { display: block; }
+            .dropdown-content a { color: rgba(255,255,255,0.8) !important; padding: 10px 28px !important; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.85rem !important; }
+            .dropdown-content a:hover { background: rgba(255,255,255,0.08) !important; padding-left: 34px !important; color: white !important; }
+            .layout { grid-template-columns: 1fr; }
+            .sidebar { position: static; max-height: 340px; overflow-y: auto; border-right: none; border-bottom: 2px solid var(--border); }
+            .map-container, .map-container iframe { min-height: 50vh; }
+            .hero { padding: 20px 4%; }
+            .gov-bar { padding: 8px 4%; }
+            .gov-bar img { height: 40px; }
+        }
+        @media (max-width: 600px) { .gov-bar-text { display: none; } }
+        @media (max-width: 500px) { .hero h1 { font-size: 1.35rem; } .badge { font-size: 0.68rem; padding: 3px 8px; } }
+    </style>
+</head>
+<body>
+
+<div class="gov-bar">
+    <img id="logo-img" alt="Logo organización">
+    <span class="gov-bar-text" id="org-name"></span>
+</div>
+
+<nav>
+    <ul class="menu-principal" id="menu-principal">
+        <li class="menu-item"><a href="index.html">Inicio</a></li>
+        <li class="menu-item"><a href="#">Territorios</a></li>
+        <li class="menu-item">
+            <a href="#" id="nav-cartografias">Cartografías ▾</a>
+            <div class="dropdown-content" id="dd-cartografias"></div>
+        </li>
+        <li class="menu-item">
+            <a href="#" id="nav-estadisticas">Estadísticas ▾</a>
+            <div class="dropdown-content" id="dd-estadisticas"></div>
+        </li>
+        <li class="menu-item">
+            <a href="#" id="nav-viviendas">Viviendas ▾</a>
+            <div class="dropdown-content" id="dd-viviendas"></div>
+        </li>
+        <li class="menu-item">
+            <a href="#" id="nav-aplicaciones">Aplicaciones ▾</a>
+            <div class="dropdown-content" id="dd-aplicaciones"></div>
+        </li>
+    </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menú">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<div class="hero">
+    <div class="breadcrumb">
+        <a href="index.html">Inicio</a> <span>›</span>
+        <a href="#">Cartografías</a> <span>›</span>
+        <span id="bc-municipio" style="color:rgba(255,255,255,0.85)"></span>
+    </div>
+    <h1>
+        <em id="hero-sub"></em>
+        <span id="hero-title"></span>
+    </h1>
+    <div class="hero-badges">
+        <div class="badge"><div class="badge-dot"></div><span id="badge-año"></span></div>
+        <div class="badge">📍 Santander, Colombia</div>
+        <div class="badge" id="badge-veredas"></div>
+    </div>
+</div>
+
+<div class="layout">
+    <aside class="sidebar">
+
+        <div class="sb-section">
+            <div class="sb-title">Capa base</div>
+            <div class="base-btns">
+                <button class="base-btn" data-base="satellite" onclick="setBase(this)">
+                    <span class="bicon">🛰️</span><span class="blabel">Satélite</span><span class="bcheck"></span>
+                </button>
+                <button class="base-btn active" data-base="terrain" onclick="setBase(this)">
+                    <span class="bicon">🏔️</span><span class="blabel">Terreno</span><span class="bcheck"></span>
+                </button>
+                <button class="base-btn" data-base="road" onclick="setBase(this)">
+                    <span class="bicon">🛣️</span><span class="blabel">Vías</span><span class="bcheck"></span>
+                </button>
+            </div>
+
+        <div class="sb-section">
+            <div class="sb-title">Veredas <span id="vereda-count" style="font-weight:400;color:var(--text-muted);font-size:0.65rem;margin-left:4px;"></span></div>
+            <div class="vereda-btns" id="vereda-btns">
+                <input type="text" class="vereda-search" id="vereda-search" placeholder="🔍 Buscar vereda…" oninput="filtrarVeredas(this.value)">
+                <button class="all-btn" onclick="toggleAllVeredas()">🗺️ Activar / Desactivar todas</button>
+            </div>
+        </div>
+
+        <div class="sb-section">
+            <div class="sb-title">Acciones</div>
+            <a id="action-open" href="#" target="_blank" class="action-link primary">🗺️ Abrir mapa completo</a>
+            <a href="index.html" class="action-link secondary">← Volver al inicio</a>
+        </div>
+
+    </aside>
+
+    <div class="map-zone">
+        <div class="map-container">
+            <div class="map-loader" id="mapLoader">
+                <div class="spinner"></div>
+                <div class="loader-txt" id="loader-txt">Cargando cartografía…</div>
+            </div>
+            <iframe id="mapFrame" title="Cartografía EBS+" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <span id="footer-copy"></span>
+    <span>QGIS · qgis2web · OpenLayers</span>
+    <a href="index.html">← Inicio</a>
+</footer>
+
+<!-- ── INICIALIZACIÓN DOM ─────────────────────────────────── -->
+<script>
+// Filtro de búsqueda de veredas
+function filtrarVeredas(q) {
+    var query = q.toLowerCase().trim();
+    document.querySelectorAll('.vereda-btn').forEach(function(btn) {
+        var label = btn.querySelector('.v-label').textContent.toLowerCase();
+        btn.classList.toggle('hidden', query !== '' && label.indexOf(query) === -1);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var C = CONFIG;
+    var mapSrc = C.qgisFolder + '/index.html';
+
+    // Título
+    document.title = 'Cartografía · ' + C.municipio + ' · ' + C.orgShort;
+
+    // Gov bar
+    document.getElementById('logo-img').src = C.logoSrc;
+    document.getElementById('org-name').textContent = C.orgName;
+
+    // Hero
+    document.getElementById('bc-municipio').textContent = C.municipio;
+    document.getElementById('hero-sub').textContent     = 'Cartografía · ' + C.orgShort + ' ' + C.año;
+    document.getElementById('hero-title').textContent   = 'Municipio de ' + C.municipio;
+    document.getElementById('badge-año').textContent    = 'Mapa activo · ' + C.año;
+    document.getElementById('badge-veredas').textContent = '🏠 ' + C.veredas.length + ' veredas';
+
+    // Iframe
+    var frame = document.getElementById('mapFrame');
+    frame.onload = function() { onMapReady(); };
+    frame.src = mapSrc;
+
+    document.getElementById('loader-txt').textContent = 'Cargando cartografía de ' + C.municipio + '…';
+    document.getElementById('action-open').href = mapSrc;
+    document.getElementById('footer-copy').textContent = '© ' + C.año + ' ' + C.orgShort + ' · Castillo';
+
+    // Dropdowns del menú
+    var seccionesMap = {
+        'dd-cartografias': 'cartografias',
+        'dd-estadisticas': 'estadisticas',
+        'dd-viviendas':    'viviendas',
+        'dd-aplicaciones': 'aplicaciones',
+    };
+    Object.keys(seccionesMap).forEach(function(ddId) {
+        var seccion = seccionesMap[ddId];
+        var dd      = document.getElementById(ddId);
+        var lista   = C.menuMunicipios[seccion] || [];
+        dd.innerHTML = lista.map(function(m) {
+            var esPaginaActual = (m.label === C.municipio && seccion === C.seccionActiva);
+            return '<a href="' + m.href + '"' + (esPaginaActual ? ' class="active-page"' : '') + '>' + m.label + '</a>';
+        }).join('');
+    });
+
+    // Sección activa en el nav
+    var navIds = {
+        'cartografias': 'nav-cartografias',
+        'estadisticas': 'nav-estadisticas',
+        'viviendas':    'nav-viviendas',
+        'aplicaciones': 'nav-aplicaciones',
+    };
+    var activeEl = document.getElementById(navIds[C.seccionActiva]);
+    if (activeEl) activeEl.classList.add('active');
+
+    // Botones de veredas dinámicos
+    var vBtns   = document.getElementById('vereda-btns');
+    var countEl = document.getElementById('vereda-count');
+    if (countEl) countEl.textContent = '(' + C.veredas.length + ')';
+
+    C.veredas.forEach(function(v) {
+        var btn = document.createElement('button');
+        btn.className        = 'vereda-btn on';
+        btn.dataset.vereda   = v.id;
+        btn.onclick          = function() { toggleVereda(this); };
+        btn.innerHTML        = '<span class="v-icon">' + v.icon + '</span>'
+                             + '<span class="v-label">' + v.label + '</span>'
+                             + '<span class="v-dot"></span>';
+        vBtns.appendChild(btn);
+    });
+
+    // Dropdowns táctiles en móvil
+    document.querySelectorAll('.menu-item > a').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            if (window.innerWidth > 860) return;
+            var dd = this.parentElement.querySelector('.dropdown-content');
+            if (!dd) return;
+            e.preventDefault();
+            dd.classList.toggle('open');
+        });
+    });
+
+    // Cerrar menú al hacer clic fuera
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('nav')) {
+            var menu = document.querySelector('.menu-principal');
+            var ham  = document.getElementById('hamburger');
+            if (menu) menu.classList.remove('open');
+            if (ham)  ham.classList.remove('open');
+        }
+    });
+});
+</script>
+</body>
+</html>

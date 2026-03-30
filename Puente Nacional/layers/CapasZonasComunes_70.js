@@ -1,0 +1,1 @@
+var json_CapasZonasComunes_70 = {"type":"FeatureCollection","name":"CapasZonasComunes_70","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[]}

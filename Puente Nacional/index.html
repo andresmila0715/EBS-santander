@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="./resources/ol.css">
+        <link rel="stylesheet" href="resources/fontawesome-all.min.css">
+        <link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
+        <link rel="stylesheet" href="./resources/qgis2web.css">
+        <style>
+        html, body {
+            background-color: #ffffff;
+        }
+        .ol-control > * {
+            background-color: #f8f8f8!important;
+            color: #444444!important;
+            border-radius: 0px;
+        }
+        .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
+            color: #444444!important;
+        }
+        .search-layer-input-search {
+            background-color: #f8f8f8!important;
+        }
+        .ol-control > *:focus, .ol-control >*:hover {
+            background-color: rgba(248, 248, 248, 0.7)!important;
+        } 
+        .ol-control {
+            background-color: rgba(255,255,255,.4) !important;
+            padding: 2px !important;
+        } 
+        </style>
+
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+            <div id="popup" class="ol-popup">
+                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                <div id="popup-content"></div>
+            </div>
+        </div>
+        <script src="resources/qgis2web_expressions.js"></script>
+        <script src="./resources/functions.js"></script>
+        <script src="./resources/ol.js"></script>
+        <script src="./resources/ol-layerswitcher.js"></script>
+        <script src="resources/photon-geocoder-autocomplete.min.js"></script>
+        <script src="layers/CapasMONTES_4.js"></script><script src="layers/CapasBarriochico_5.js"></script><script src="layers/CapasCentro_6.js"></script><script src="layers/CapasLaFlorida_7.js"></script><script src="layers/CapasLaUnion_8.js"></script><script src="layers/CapasLasPalmeras_9.js"></script><script src="layers/CapasPalacio_10.js"></script><script src="layers/CapasPetaqueros2_11.js"></script><script src="layers/CapasPETAQUEROS1_12.js"></script><script src="layers/CapasSanFernando_13.js"></script><script src="layers/CapasSantaRosa_14.js"></script><script src="layers/CapasSemisa1_15.js"></script><script src="layers/CapasSemisa2_16.js"></script><script src="layers/CapasSemisa3_17.js"></script><script src="layers/CapasSemisa4_18.js"></script><script src="layers/CapasVillaCampestre_19.js"></script><script src="layers/CapasVillaVieja_20.js"></script><script src="layers/culebrilla_21.js"></script><script src="layers/CapasCuevas_22.js"></script><script src="layers/CapasEscuelas_23.js"></script><script src="layers/CapasAguaFria_24.js"></script><script src="layers/CapasBravoPaezA_25.js"></script><script src="layers/CapasBravoPaezB_26.js"></script><script src="layers/CapasLomadeHoyos_27.js"></script><script src="layers/CapasAltoCruces_28.js"></script><script src="layers/CapasSanVicenteBajo_29.js"></script><script src="layers/CapasSanVicenteAlto_30.js"></script><script src="layers/CapasPiedealto_31.js"></script><script src="layers/CapasSantaRita_32.js"></script><script src="layers/CapasChiquinta_33.js"></script><script src="layers/CapasCorbaraque_34.js"></script><script src="layers/CapasPoazaque_35.js"></script><script src="layers/CapasLaRetirada_36.js"></script><script src="layers/CapasCanoas_37.js"></script><script src="layers/CapasMompox_38.js"></script><script src="layers/CapasJardinesDelRecuerdo_39.js"></script><script src="layers/CapasPescaderito_40.js"></script><script src="layers/CapasLaFeria_41.js"></script><script src="layers/CapasElSaman_42.js"></script><script src="layers/CapasAltoGrande_43.js"></script><script src="layers/CapasResguardo_44.js"></script><script src="layers/CapasCabreraAlta_45.js"></script><script src="layers/CapasPortachuelo_46.js"></script><script src="layers/CapasBarroBlanco_47.js"></script><script src="layers/CapasCabreraBaja_48.js"></script><script src="layers/CapasElOscuro_49.js"></script><script src="layers/CapasLaderas_50.js"></script><script src="layers/CapasCristales_51.js"></script><script src="layers/CapasCascoUrbano_52.js"></script><script src="layers/CapasAngostura_53.js"></script><script src="layers/CapasBuenosAires_54.js"></script><script src="layers/CapasArciniegas_55.js"></script><script src="layers/CapasHospedajes_56.js"></script><script src="layers/CapasRiesgoAltoEfectiva_57.js"></script><script src="layers/CapasRiesgoAltoEfectivaSinPatologias_58.js"></script><script src="layers/CapasRiesgoAltoNohabitada_59.js"></script><script src="layers/CapasRiesgoBajoEfectiva_60.js"></script><script src="layers/CapasRiesgoBajoEfectivaSinPatologias_61.js"></script><script src="layers/CapasRiesgoBajoHabitadaOcasionalmente_62.js"></script><script src="layers/CapasRiesgoBajoNoEfectiva_63.js"></script><script src="layers/CapasRiesgoBajoNoHabitada_64.js"></script><script src="layers/CapasRiesgoMedioEfectiva_65.js"></script><script src="layers/CapasRiesgoMedioEfectivaSinPatologias_66.js"></script><script src="layers/CapasRiesgoMedioHabitadaOcasionalmente_67.js"></script><script src="layers/CapasRiesgoMedioNoEfectiva_68.js"></script><script src="layers/CapasRiesgoMedioNoHabitada_69.js"></script><script src="layers/CapasZonasComunes_70.js"></script><script src="layers/CapasZonasTuristicas_71.js"></script>
+        <script src="styles/CapasMONTES_4_style.js"></script><script src="styles/CapasBarriochico_5_style.js"></script><script src="styles/CapasCentro_6_style.js"></script><script src="styles/CapasLaFlorida_7_style.js"></script><script src="styles/CapasLaUnion_8_style.js"></script><script src="styles/CapasLasPalmeras_9_style.js"></script><script src="styles/CapasPalacio_10_style.js"></script><script src="styles/CapasPetaqueros2_11_style.js"></script><script src="styles/CapasPETAQUEROS1_12_style.js"></script><script src="styles/CapasSanFernando_13_style.js"></script><script src="styles/CapasSantaRosa_14_style.js"></script><script src="styles/CapasSemisa1_15_style.js"></script><script src="styles/CapasSemisa2_16_style.js"></script><script src="styles/CapasSemisa3_17_style.js"></script><script src="styles/CapasSemisa4_18_style.js"></script><script src="styles/CapasVillaCampestre_19_style.js"></script><script src="styles/CapasVillaVieja_20_style.js"></script><script src="styles/culebrilla_21_style.js"></script><script src="styles/CapasCuevas_22_style.js"></script><script src="styles/CapasEscuelas_23_style.js"></script><script src="styles/CapasAguaFria_24_style.js"></script><script src="styles/CapasBravoPaezA_25_style.js"></script><script src="styles/CapasBravoPaezB_26_style.js"></script><script src="styles/CapasLomadeHoyos_27_style.js"></script><script src="styles/CapasAltoCruces_28_style.js"></script><script src="styles/CapasSanVicenteBajo_29_style.js"></script><script src="styles/CapasSanVicenteAlto_30_style.js"></script><script src="styles/CapasPiedealto_31_style.js"></script><script src="styles/CapasSantaRita_32_style.js"></script><script src="styles/CapasChiquinta_33_style.js"></script><script src="styles/CapasCorbaraque_34_style.js"></script><script src="styles/CapasPoazaque_35_style.js"></script><script src="styles/CapasLaRetirada_36_style.js"></script><script src="styles/CapasCanoas_37_style.js"></script><script src="styles/CapasMompox_38_style.js"></script><script src="styles/CapasJardinesDelRecuerdo_39_style.js"></script><script src="styles/CapasPescaderito_40_style.js"></script><script src="styles/CapasLaFeria_41_style.js"></script><script src="styles/CapasElSaman_42_style.js"></script><script src="styles/CapasAltoGrande_43_style.js"></script><script src="styles/CapasResguardo_44_style.js"></script><script src="styles/CapasCabreraAlta_45_style.js"></script><script src="styles/CapasPortachuelo_46_style.js"></script><script src="styles/CapasBarroBlanco_47_style.js"></script><script src="styles/CapasCabreraBaja_48_style.js"></script><script src="styles/CapasElOscuro_49_style.js"></script><script src="styles/CapasLaderas_50_style.js"></script><script src="styles/CapasCristales_51_style.js"></script><script src="styles/CapasCascoUrbano_52_style.js"></script><script src="styles/CapasAngostura_53_style.js"></script><script src="styles/CapasBuenosAires_54_style.js"></script><script src="styles/CapasArciniegas_55_style.js"></script><script src="styles/CapasHospedajes_56_style.js"></script><script src="styles/CapasRiesgoAltoEfectiva_57_style.js"></script><script src="styles/CapasRiesgoAltoEfectivaSinPatologias_58_style.js"></script><script src="styles/CapasRiesgoAltoNohabitada_59_style.js"></script><script src="styles/CapasRiesgoBajoEfectiva_60_style.js"></script><script src="styles/CapasRiesgoBajoEfectivaSinPatologias_61_style.js"></script><script src="styles/CapasRiesgoBajoHabitadaOcasionalmente_62_style.js"></script><script src="styles/CapasRiesgoBajoNoEfectiva_63_style.js"></script><script src="styles/CapasRiesgoBajoNoHabitada_64_style.js"></script><script src="styles/CapasRiesgoMedioEfectiva_65_style.js"></script><script src="styles/CapasRiesgoMedioEfectivaSinPatologias_66_style.js"></script><script src="styles/CapasRiesgoMedioHabitadaOcasionalmente_67_style.js"></script><script src="styles/CapasRiesgoMedioNoEfectiva_68_style.js"></script><script src="styles/CapasRiesgoMedioNoHabitada_69_style.js"></script><script src="styles/CapasZonasComunes_70_style.js"></script><script src="styles/CapasZonasTuristicas_71_style.js"></script>
+        <script src="./layers/layers.js" type="text/javascript"></script> 
+        <script src="./resources/Autolinker.min.js"></script>
+        <script src="./resources/qgis2web.js"></script>
+    </body>
+</html>
